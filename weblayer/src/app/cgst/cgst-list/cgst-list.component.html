@@ -1,0 +1,58 @@
+<div class="text-center mt-3">
+    <h2>Central GST - {{pagination?.totalItems}} found</h2>
+</div>
+
+<div class="container mt-3">
+    <form #form="ngForm" class="form-inline mb-3" (ngSubmit)="loadCgstList()" autocomplete="off">
+        <div class="form-group px-2">
+            <label>Sort By: </label>
+            <select name="sortBy" style="width: 130px" [(ngModel)]="cgstParams.orderBy" class="form-control ml-1">
+                <option *ngFor="let sortBy of sortByList" [value]="sortBy.value">
+                    {{sortBy.display}}
+                </option>
+            </select>
+        </div>
+        <div class="form-group px-2">
+            <label>Page Size: </label>
+            <select name="pageSize" style="width: 130px" [(ngModel)]="cgstParams.pageSize" class="form-control ml-1">
+                <option *ngFor="let pageSize of pageSizes" [value]="pageSize.value">
+                    {{pageSize.display}}
+                </option>
+            </select>
+        </div>
+        <button class="btn btn-primary ml-1" type="submit">Apply Filters</button>
+        <button (click)="resetFilters()" class="btn btn-info ml-1" type="submit">Reset Filters</button>
+        <button (click)="addNewRecord()" class="btn btn-info ml-1" type="submit">New</button>
+    </form>
+</div>
+
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Detail</th>
+                <th>Rate</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let cgst of cgstModels">
+                <td>{{ cgst.cgstId }}</td>
+                <td>{{ cgst.cgstDetail}}</td>
+                <td>{{ cgst.cgstRate }}</td>
+                <td>
+                    <button class="btn btn-primary" routerLink='/cgst/{{cgst.cgstId}}'>Edit</button> &nbsp;
+                    <button class="btn btn-primary" (click)="deleteRecord()">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="d-flex justify-content-center" *ngIf="pagination">
+    <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
+        [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" previousText="&lsaquo;"
+        nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+    </pagination>
+</div>

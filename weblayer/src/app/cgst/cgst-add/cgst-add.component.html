@@ -1,0 +1,14 @@
+<form [formGroup]='addForm' (ngSubmit)="register()" autocomplete="off">
+
+    <app-text-input [formControl]='addForm.controls["cgstId"]' [label]='"Id"' [type]='"number"'></app-text-input>
+    <app-text-input [formControl]='addForm.controls["cgstDetail"]' [label]='"Detail"'></app-text-input>
+    <app-text-input [formControl]='addForm.controls["cgstRate"]' [label]='"Rate"' [type]='"number"' step="0.01"></app-text-input>
+
+    <div class="form-group text-center">
+        <button class="btn btn-success mr-2" type="submit">Save</button>
+        <button class="btn btn-default mr-2">Cancel</button>
+    </div>
+
+</form>
+<p>Form value: {{addForm.value}}|json</p>
+<p>Form status: {{addForm.status}}|json</p>
