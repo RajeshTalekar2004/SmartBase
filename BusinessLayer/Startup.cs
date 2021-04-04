@@ -11,6 +11,9 @@ using Microsoft.OpenApi.Models;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Services;
 using SmartBase.BusinessLayer.Services.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,22 +32,13 @@ namespace SmartBase.BusinessLayer
         public void ConfigureServices(IServiceCollection services)
         {
 
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SmartBase-Bussiness", Version = "v1", Description = "REST API for SmartBase Account System" });
 
             });
 
-            services.AddCors(option =>
-            {
-                option.AddPolicy("Default", builder =>
-                builder
-                .AllowAnyOrigin()
-                .AllowAnyHeader()
-                .WithOrigins("http://localhost:4200"));
-            });
-
+            services.AddCors();
 
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -98,13 +92,12 @@ namespace SmartBase.BusinessLayer
             services.AddScoped<IVoucherDetailService, VoucherDetailService>();
             services.AddControllers();
 
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -112,18 +105,28 @@ namespace SmartBase.BusinessLayer
 
             app.UseSwagger();
 
-
             //Enable middleware to serve swagger-ui
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "SmartBase-Bussiness v1");
             });
 
-            //app.UseHttpsRedirection();
 
+            app.UseHttpsRedirection();
             app.UseRouting();
 
-            app.UseCors("Default");
+            var _configuration = new ConfigurationBuilder()
+                       .SetBasePath(Directory.GetCurrentDirectory())
+                       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                       .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+                       .AddEnvironmentVariables()
+                       .Build();
+
+            var hosts   = _configuration.GetSection("Cors:AllowedOriginsList").Get<List<string>>();
+            app.UseCors(options =>
+                options.WithOrigins(hosts.ToArray())
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseAuthentication();
 
