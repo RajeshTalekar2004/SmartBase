@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using SmartBase.BusinessLayer.Core.Domain;
+using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
 using SmartBase.BusinessLayer.Services.Interfaces;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authorization;
-using SmartBase.BusinessLayer.Persistence.PageParams;
-using SmartBase.BusinessLayer.Persistence;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Controllers
 {
@@ -55,8 +53,6 @@ namespace SmartBase.BusinessLayer.Controllers
                 response.Success = false;
                 response.Message = ex.Message;
             }
-
-
             return Ok(response);
         }
 
@@ -67,11 +63,22 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <returns></returns>
         [Route("GetAllByPage")]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] CgstParams cgstParams)
+        public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] CgstMasterModel getCgstMaster)
         {
-            var cgstList = await _cgstMasterService.GetAll(cgstParams);
-            Response.AddPaginationHeader(cgstList.CurrentPage, cgstList.PageSize, cgstList.TotalCount, cgstList.TotalPages);
-            return Ok(cgstList);
+            ServiceResponseModel<IEnumerable<CgstMaster>> response = new ServiceResponseModel<IEnumerable<CgstMaster>>();
+            try
+            {
+                var cgstList = await _cgstMasterService.GetAll(pageParams, getCgstMaster);
+                Response.AddPaginationHeader(cgstList.CurrentPage, cgstList.PageSize, cgstList.TotalCount, cgstList.TotalPages);
+                response.Data = cgstList;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return Ok(response);
         }
 
 

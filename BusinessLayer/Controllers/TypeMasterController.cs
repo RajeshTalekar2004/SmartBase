@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using SmartBase.BusinessLayer.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Controllers
@@ -189,23 +187,32 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <returns></returns>
         [Route("GetAllByPage")]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] TypeParams typeParams)
+        public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] TypeMasterModel getTypeMasterModel)
         {
-            if (string.IsNullOrWhiteSpace(typeParams.CompCode))
+            ServiceResponseModel<IEnumerable<TypeMaster>> response = new ServiceResponseModel<IEnumerable<TypeMaster>>();
+            try
             {
-                throw new ArgumentNullException("CompCode is required");
+                if (string.IsNullOrWhiteSpace(getTypeMasterModel.CompCode))
+                {
+                    throw new ArgumentNullException("CompCode is required");
+                }
+                if (string.IsNullOrWhiteSpace(getTypeMasterModel.AccYear))
+                {
+                    throw new ArgumentNullException("AccYear is required");
+                }
+                var typeList = await _typeMasterService.GetAll(pageParams, getTypeMasterModel);
+                Response.AddPaginationHeader(typeList.CurrentPage, typeList.PageSize, typeList.TotalCount, typeList.TotalPages);
+                response.Data = typeList;
             }
-            if (string.IsNullOrWhiteSpace(typeParams.AccYear))
+            catch (Exception ex)
             {
-                throw new ArgumentNullException("AccYear is required");
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
             }
-            var typeList = await _typeMasterService.GetAll(typeParams);
-            Response.AddPaginationHeader(typeList.CurrentPage, typeList.PageSize, typeList.TotalCount, typeList.TotalPages);
-            return Ok(typeList);
+            return Ok(response);
+
         }
-
-
-
 
         [Route("GetTypeByCode")]
         [HttpGet]

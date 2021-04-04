@@ -19,7 +19,7 @@ namespace SmartBase.BusinessLayer.Persistence.Models
         public decimal? Amount { get; set; }
         public string CorrAccountId { get; set; }
         public string VouDetail { get; set; }
-
+        public string OrderBy { get; set; } = "vouNo";
         public virtual VoucherMasterModel VoucherMaster { get; set; }
     }
 }

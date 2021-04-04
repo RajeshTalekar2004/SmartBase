@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using SmartBase.BusinessLayer.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,10 +16,12 @@ namespace SmartBase.BusinessLayer.Controllers
     public class VoucherMasterController : ControllerBase
     {
         private IVoucherMasterService _voucherMasterService;
+        private readonly ILogger<TransactionMasterController> _logger;
 
-        public VoucherMasterController(IVoucherMasterService voucherMasterService)
+        public VoucherMasterController(IVoucherMasterService voucherMasterService, ILogger<TransactionMasterController> logger)
         {
             _voucherMasterService = voucherMasterService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -30,7 +32,27 @@ namespace SmartBase.BusinessLayer.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add(VoucherMasterModel newVoucherMasterModel)
         {
-            return Ok(await _voucherMasterService.Add(newVoucherMasterModel));
+            ServiceResponseModel<VoucherMasterModel> response = new ServiceResponseModel<VoucherMasterModel>();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(newVoucherMasterModel.CompCode))
+                {
+                    throw new ArgumentNullException("CompCode is required");
+                }
+                if (string.IsNullOrWhiteSpace(newVoucherMasterModel.AccYear))
+                {
+                    throw new ArgumentNullException("AccYear is required");
+                }
+                response = await _voucherMasterService.Add(newVoucherMasterModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return Ok(response);
+            
         }
 
         /// <summary>
@@ -41,7 +63,26 @@ namespace SmartBase.BusinessLayer.Controllers
         [HttpDelete("{Delete}")]
         public  async Task<IActionResult> Delete(VoucherMasterModel delVoucherMasterModel)
         {
-            return Ok(await _voucherMasterService.Delete(delVoucherMasterModel));
+            ServiceResponseModel<VoucherMasterModel> response = new ServiceResponseModel<VoucherMasterModel>();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(delVoucherMasterModel.CompCode))
+                {
+                    throw new ArgumentNullException("CompCode is required");
+                }
+                if (string.IsNullOrWhiteSpace(delVoucherMasterModel.AccYear))
+                {
+                    throw new ArgumentNullException("AccYear is required");
+                }
+                response = await _voucherMasterService.Delete(delVoucherMasterModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -52,10 +93,24 @@ namespace SmartBase.BusinessLayer.Controllers
         [HttpPut("Edit")]
         public async Task<IActionResult> Edit(VoucherMasterModel editVoucherMasterModel)
         {
-            ServiceResponseModel<VoucherMasterModel> response = await _voucherMasterService.Edit(editVoucherMasterModel);
-            if (response.Data == null)
+            ServiceResponseModel<VoucherMasterModel> response = new ServiceResponseModel<VoucherMasterModel>();
+            try
             {
-                return NotFound(response);
+                if (string.IsNullOrWhiteSpace(editVoucherMasterModel.CompCode))
+                {
+                    throw new ArgumentNullException("CompCode is required");
+                }
+                if (string.IsNullOrWhiteSpace(editVoucherMasterModel.AccYear))
+                {
+                    throw new ArgumentNullException("AccYear is required");
+                }
+                response = await _voucherMasterService.Edit(editVoucherMasterModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
             }
             return Ok(response);
         }
@@ -69,10 +124,24 @@ namespace SmartBase.BusinessLayer.Controllers
         [HttpGet]
         public async Task<IActionResult> GetByTrxType(VoucherMasterModel editVoucherMasterModel)
         {
-            ServiceResponseModel<IEnumerable<VoucherMasterModel>> response = await _voucherMasterService.GetByTrxType(editVoucherMasterModel);
-            if (response.Data == null)
+            ServiceResponseModel<IEnumerable<VoucherMasterModel>> response = new ServiceResponseModel<IEnumerable<VoucherMasterModel>>();
+            try
             {
-                return NotFound(response);
+                if (string.IsNullOrWhiteSpace(editVoucherMasterModel.CompCode))
+                {
+                    throw new ArgumentNullException("CompCode is required");
+                }
+                if (string.IsNullOrWhiteSpace(editVoucherMasterModel.AccYear))
+                {
+                    throw new ArgumentNullException("AccYear is required");
+                }
+                response = await _voucherMasterService.GetByTrxType(editVoucherMasterModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
             }
             return Ok(response);
         }
@@ -86,8 +155,26 @@ namespace SmartBase.BusinessLayer.Controllers
         [HttpGet]
         public async Task<IActionResult> GetByVouNo(VoucherMasterModel getVoucherMasterModel)
         {
-            return Ok(await _voucherMasterService.GetByVouNo(getVoucherMasterModel));
-
+            ServiceResponseModel<VoucherMasterModel> response = new ServiceResponseModel<VoucherMasterModel>();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(getVoucherMasterModel.CompCode))
+                {
+                    throw new ArgumentNullException("CompCode is required");
+                }
+                if (string.IsNullOrWhiteSpace(getVoucherMasterModel.AccYear))
+                {
+                    throw new ArgumentNullException("AccYear is required");
+                }
+                response = await _voucherMasterService.GetByVouNo(getVoucherMasterModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return Ok(response);
         }
 
 
@@ -95,10 +182,24 @@ namespace SmartBase.BusinessLayer.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAccountByTrxId([FromBody] VoucherMasterModel getVoucherMasterModel)
         {
-            ServiceResponseModel<IEnumerable<AccountMasterModel>> response = await _voucherMasterService.GetAccountByTrxId(getVoucherMasterModel);
-            if (response.Data == null)
+            ServiceResponseModel<IEnumerable<AccountMasterModel>> response = new ServiceResponseModel<IEnumerable<AccountMasterModel>>();
+            try
             {
-                return NotFound(response);
+                if (string.IsNullOrWhiteSpace(getVoucherMasterModel.CompCode))
+                {
+                    throw new ArgumentNullException("CompCode is required");
+                }
+                if (string.IsNullOrWhiteSpace(getVoucherMasterModel.AccYear))
+                {
+                    throw new ArgumentNullException("AccYear is required");
+                }
+                response = await _voucherMasterService.GetAccountByTrxId(getVoucherMasterModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
             }
             return Ok(response);
         }
@@ -109,24 +210,23 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <returns></returns>
         [Route("GetAllByPage")]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] VoucherParams voucherParams)
+        public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] VoucherMasterModel getVoucherMasterModel)
         {
-            if (string.IsNullOrWhiteSpace(voucherParams.CompCode))
+            if (string.IsNullOrWhiteSpace(getVoucherMasterModel.CompCode))
             {
                 throw new ArgumentNullException("CompCode is required");
             }
-            if (string.IsNullOrWhiteSpace(voucherParams.AccYear))
+            if (string.IsNullOrWhiteSpace(getVoucherMasterModel.AccYear))
             {
                 throw new ArgumentNullException("AccYear is required");
             }
-            if (string.IsNullOrWhiteSpace(voucherParams.TrxType))
+            if (string.IsNullOrWhiteSpace(getVoucherMasterModel.TrxType))
             {
                 throw new ArgumentNullException("TrxType is required");
             }
-            var vouMstList = await _voucherMasterService.GetAll(voucherParams);
+            var vouMstList = await _voucherMasterService.GetAll(pageParams, getVoucherMasterModel);
             Response.AddPaginationHeader(vouMstList.CurrentPage, vouMstList.PageSize, vouMstList.TotalCount, vouMstList.TotalPages);
             return Ok(vouMstList);
         }
-
     }
 }

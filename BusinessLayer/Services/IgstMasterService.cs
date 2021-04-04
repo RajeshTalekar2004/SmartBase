@@ -2,7 +2,6 @@
 using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using SmartBase.BusinessLayer.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,11 +63,11 @@ namespace SmartBase.BusinessLayer.Services
             return serviceResponse;
         }
 
-        public async Task<PagedList<IgstMaster>> GetAll(IgstParams igstParams)
+        public async Task<PagedList<IgstMaster>> GetAll(PageParams pageParams, IgstMasterModel getIgstMaster)
         {
             var query = _context.IgstMasters.AsQueryable();
 
-            switch (igstParams.OrderBy)
+            switch (getIgstMaster.OrderBy)
             {
                 case "igstDetail":
                     query = query.OrderBy(c => c.IgstDetail);
@@ -81,7 +80,7 @@ namespace SmartBase.BusinessLayer.Services
                     break;
             }
 
-            return await PagedList<IgstMaster>.CreateAsync(query, igstParams.PageNumber, igstParams.PageSize);
+            return await PagedList<IgstMaster>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
 

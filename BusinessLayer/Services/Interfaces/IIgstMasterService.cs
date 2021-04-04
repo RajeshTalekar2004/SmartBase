@@ -1,7 +1,6 @@
 ﻿using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,7 +10,7 @@ namespace SmartBase.BusinessLayer.Services.Interfaces
     {
         Task<ServiceResponseModel<IEnumerable<IgstMasterModel>>> GetAll();
 
-        Task<PagedList<IgstMaster>> GetAll(IgstParams IgstParams);
+        Task<PagedList<IgstMaster>> GetAll(PageParams pageParams, IgstMasterModel getIgstMaster);
 
         Task<ServiceResponseModel<IgstMasterModel>> GetIgstByCode(int igstId);
 

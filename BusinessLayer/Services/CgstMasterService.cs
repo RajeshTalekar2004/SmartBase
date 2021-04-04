@@ -2,7 +2,6 @@
 using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using SmartBase.BusinessLayer.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,12 +52,12 @@ namespace SmartBase.BusinessLayer.Services
             return serviceResponse;
         }
 
-        public async Task<PagedList<CgstMaster>> GetAll(CgstParams cgstParams)
+        public async Task<PagedList<CgstMaster>> GetAll(PageParams pageParams, CgstMasterModel getCgstMaster)
         {
             var query = _context.CgstMasters
                         .AsQueryable();
 
-            switch (cgstParams.OrderBy)
+            switch (getCgstMaster.OrderBy)
             {
                 case "cgstDetail":
                     query = query.OrderBy(c => c.CgstDetail);
@@ -71,7 +70,7 @@ namespace SmartBase.BusinessLayer.Services
                     break;
             }
 
-            return await PagedList<CgstMaster>.CreateAsync(query, cgstParams.PageNumber, cgstParams.PageSize);
+            return await PagedList<CgstMaster>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
 

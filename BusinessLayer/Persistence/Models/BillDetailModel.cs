@@ -13,6 +13,7 @@ namespace SmartBase.BusinessLayer.Persistence.Models
         public int ItemSr { get; set; }
         public string VouNo { get; set; }
         public decimal Amount { get; set; }
+        public string OrderBy { get; set; } = "billId";
 
         public virtual BillMasterModel BillMaster { get; set; }
     }

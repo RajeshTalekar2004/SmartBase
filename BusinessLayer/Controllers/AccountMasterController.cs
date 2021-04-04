@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using SmartBase.BusinessLayer.Core.Domain;
+using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
 using SmartBase.BusinessLayer.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authorization;
-using SmartBase.BusinessLayer.Persistence.PageParams;
-using SmartBase.BusinessLayer.Persistence;
 
 namespace SmartBase.BusinessLayer.Controllers
 {
@@ -364,20 +364,36 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <returns></returns>
         [Route("GetAllByPage")]
         [HttpGet]
-        public async Task<IActionResult> GetAll(AccountParams accountParams)
+        public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams , [FromBody] AccountMasterModel accountMasterModel)
         {
-            if (string.IsNullOrWhiteSpace(accountParams.CompCode))
-            {
-                throw new ArgumentNullException("CompCode is required");
-            }
-            if (string.IsNullOrWhiteSpace(accountParams.AccYear))
-            {
-                throw new ArgumentNullException("AccYear is required");
-            }
+            ServiceResponseModel<IEnumerable<AccountMaster>> response = new ServiceResponseModel<IEnumerable<AccountMaster>>();
 
-            var accountList = await _accountMasterService.GetAll(accountParams);
-            Response.AddPaginationHeader(accountList.CurrentPage, accountList.PageSize, accountList.TotalCount, accountList.TotalPages);
-            return Ok(accountList);
+            try
+            {
+                if (string.IsNullOrWhiteSpace(accountMasterModel.CompCode))
+                {
+                    throw new ArgumentNullException("CompCode is required");
+                }
+                if (string.IsNullOrWhiteSpace(accountMasterModel.AccYear))
+                {
+                    throw new ArgumentNullException("AccYear is required");
+                }
+                if (string.IsNullOrWhiteSpace(accountMasterModel.OrderBy))
+                {
+                    accountMasterModel.OrderBy = "accountId";
+                }
+
+                var accountList = await _accountMasterService.GetAll(pageParams, accountMasterModel);
+                Response.AddPaginationHeader(accountList.CurrentPage, accountList.PageSize, accountList.TotalCount, accountList.TotalPages);
+                response.Data = accountList;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return Ok(response);
         }
 
     }

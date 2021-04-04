@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using SmartBase.BusinessLayer.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Controllers
@@ -198,20 +196,31 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <returns></returns>
         [Route("GetAllByPage")]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] BillParams billParams)
+        public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] BillDetailModel getBillDetailModel)
         {
-            if (string.IsNullOrWhiteSpace(billParams.CompCode))
+            ServiceResponseModel<IEnumerable<BillDetail>> response = new ServiceResponseModel<IEnumerable<BillDetail>>();
+            try
             {
-                throw new ArgumentNullException("CompCode is required");
-            }
-            if (string.IsNullOrWhiteSpace(billParams.AccYear))
-            {
-                throw new ArgumentNullException("AccYear is required");
-            }
+                if (string.IsNullOrWhiteSpace(getBillDetailModel.CompCode))
+                {
+                    throw new ArgumentNullException("CompCode is required");
+                }
+                if (string.IsNullOrWhiteSpace(getBillDetailModel.AccYear))
+                {
+                    throw new ArgumentNullException("AccYear is required");
+                }
 
-            var billDetailList = await _billDetailService.GetAll(billParams);
-            Response.AddPaginationHeader(billDetailList.CurrentPage, billDetailList.PageSize, billDetailList.TotalCount, billDetailList.TotalPages);
-            return Ok(billDetailList);
+                var billDetailList = await _billDetailService.GetAll(pageParams, getBillDetailModel);
+                Response.AddPaginationHeader(billDetailList.CurrentPage, billDetailList.PageSize, billDetailList.TotalCount, billDetailList.TotalPages);
+                response.Data = billDetailList;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return Ok(response);
         }
 
 

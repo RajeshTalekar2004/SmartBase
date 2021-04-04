@@ -1,7 +1,6 @@
 ﻿using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,7 +14,7 @@ namespace SmartBase.BusinessLayer.Services.Interfaces
         Task<ServiceResponseModel<VoucherMasterModel>> GetByVouNo(VoucherMasterModel getVoucherMasterModel);
         Task<ServiceResponseModel<IEnumerable<VoucherMasterModel>>> GetByTrxType(VoucherMasterModel editVoucherMasterModel);
         Task<ServiceResponseModel<IEnumerable<AccountMasterModel>>> GetAccountByTrxId(VoucherMasterModel editVoucherMasterModel);
-        Task<PagedList<VoucherMaster>> GetAll(VoucherParams voucherParams);
+        Task<PagedList<VoucherMaster>> GetAll(PageParams pageParams, VoucherMasterModel getVoucherMasterModel);
 
     }
 }

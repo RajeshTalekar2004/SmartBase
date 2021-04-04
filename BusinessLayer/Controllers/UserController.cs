@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using SmartBase.BusinessLayer.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -62,15 +62,27 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <returns></returns>
         [Route("GetAllByPage")]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] UserParams userParams)
+        public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] UserInfoModel getUser)
         {
-            if (string.IsNullOrWhiteSpace(userParams.CompCode))
+            ServiceResponseModel<IEnumerable<UserInfo>> response = new ServiceResponseModel<IEnumerable<UserInfo>>();
+            try
             {
-                throw new ArgumentNullException("CompCode is required");
+                if (string.IsNullOrWhiteSpace(getUser.CompCode))
+                {
+                    throw new ArgumentNullException("CompCode is required");
+                }
+                var usertList = await _userService.GetAll(pageParams, getUser);
+                Response.AddPaginationHeader(usertList.CurrentPage, usertList.PageSize, usertList.TotalCount, usertList.TotalPages);
+                response.Data = usertList;
             }
-            var usertList = await _userService.GetAll(userParams);
-            Response.AddPaginationHeader(usertList.CurrentPage, usertList.PageSize, usertList.TotalCount, usertList.TotalPages);
-            return Ok(usertList);
+            catch(Exception ex)
+            {
+
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return Ok(response);
         }
 
         /// <summary>
@@ -280,23 +292,5 @@ namespace SmartBase.BusinessLayer.Controllers
             }
             return Ok(response);
         }
-
-        //[HttpGet]
-        //[Route("Login")]
-        //public async Task<IActionResult> Login([FromBody] UserInfoModel user)
-        //{
-        //    ServiceResponseModel<string> response = await _userService.Login(user.UserName);
-        //    if (!response.Success)
-        //    {
-        //        return BadRequest(response);
-        //    }
-        //    return Ok(response);
-        //}
-
-
-
-
-
-
     }
 }

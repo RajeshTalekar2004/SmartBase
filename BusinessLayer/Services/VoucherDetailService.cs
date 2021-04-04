@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Logging;
 using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using SmartBase.BusinessLayer.Services.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -77,13 +74,13 @@ namespace SmartBase.BusinessLayer.Services
             return serviceResponse;
         }
 
-        public async Task<PagedList<VoucherDetail>> GetAll(VoucherDetailParams voucherDetailParams)
+        public async Task<PagedList<VoucherDetail>> GetAll(PageParams pageParams, VoucherDetailModel getVoucherDetailModel)
         {
             var query = _context.VoucherDetails
-                        .Where(a=>a.CompCode==voucherDetailParams.CompCode && a.AccYear == voucherDetailParams.AccYear) 
+                        .Where(a=>a.CompCode== getVoucherDetailModel.CompCode && a.AccYear == getVoucherDetailModel.AccYear) 
                         .AsQueryable();
 
-            switch (voucherDetailParams.OrderBy)
+            switch (getVoucherDetailModel.OrderBy)
             {
                 case "vouNo":
                     query = query.OrderBy(c => c.CompCode).ThenBy(c=>c.AccYear).ThenBy(c=>c.VouNo).ThenBy(c=>c.ItemSr);
@@ -96,7 +93,7 @@ namespace SmartBase.BusinessLayer.Services
                     break;
             }
 
-            return await PagedList<VoucherDetail>.CreateAsync(query, voucherDetailParams.PageNumber, voucherDetailParams.PageSize);
+            return await PagedList<VoucherDetail>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
 

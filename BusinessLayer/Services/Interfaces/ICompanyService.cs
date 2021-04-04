@@ -1,7 +1,6 @@
 ﻿using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,7 +10,7 @@ namespace SmartBase.BusinessLayer.Services.Interfaces
     {
         Task<ServiceResponseModel<IEnumerable<CompanyModel>>> GetAll();
 
-        Task<PagedList<CompInfo>> GetAll(CompInfoParams compInfoParams);
+        Task<PagedList<CompInfo>> GetAll(PageParams pageParams, CompanyModel getCompany);
 
         Task<ServiceResponseModel<CompanyModel>> GetCompanyByCode(string compId);
 

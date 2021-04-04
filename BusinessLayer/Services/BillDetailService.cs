@@ -2,7 +2,6 @@
 using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using SmartBase.BusinessLayer.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,13 +74,13 @@ namespace SmartBase.BusinessLayer.Services
             return serviceResponse;
         }
 
-        public async Task<PagedList<BillDetail>> GetAll(BillParams billParams)
+        public async Task<PagedList<BillDetail>> GetAll(PageParams pageParams, BillDetailModel getBillDetailModel)
         {
             var query = _context.BillDetails
-                         .Where(a=>a.CompCode==billParams.CompCode && a.AccYear == billParams.AccYear) 
+                         .Where(a=>a.CompCode== getBillDetailModel.CompCode && a.AccYear == getBillDetailModel.AccYear) 
                         .AsQueryable();
 
-            switch (billParams.OrderBy)
+            switch (getBillDetailModel.OrderBy)
             {
                 case "billId":
                     query = query.OrderBy(c => c.CompCode).ThenBy(c=>c.AccYear).ThenBy(c=>c.BillId).ThenBy(c=>c.ItemSr);
@@ -94,7 +93,7 @@ namespace SmartBase.BusinessLayer.Services
                     break;
             }
 
-            return await PagedList<BillDetail>.CreateAsync(query, billParams.PageNumber, billParams.PageSize);
+            return await PagedList<BillDetail>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
 

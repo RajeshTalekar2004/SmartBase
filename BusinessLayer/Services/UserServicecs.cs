@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
@@ -6,14 +8,11 @@ using SmartBase.BusinessLayer.Persistence.Models;
 using SmartBase.BusinessLayer.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.Extensions.Logging;
-using SmartBase.BusinessLayer.Persistence.PageParams;
-using System.Linq;
 
 namespace SmartBase.BusinessLayer.Services
 {
@@ -65,13 +64,13 @@ namespace SmartBase.BusinessLayer.Services
             return serviceResponse;
         }
 
-        public async Task<PagedList<UserInfo>> GetAll(UserParams userParams)
+        public async Task<PagedList<UserInfo>> GetAll(PageParams pageParams, UserInfoModel getUser)
         {
             var query = _context.UserInfos
-                         .Where(a=>a.CompCode==userParams.CompCode)
+                         .Where(a=>a.CompCode== getUser.CompCode)
                          .AsQueryable();
 
-            switch (userParams.OrderBy)
+            switch (getUser.OrderBy)
             {
                 case "userName":
                     query = query.OrderBy(c => c.CompCode).ThenBy(c=>c.UserName);
@@ -84,7 +83,7 @@ namespace SmartBase.BusinessLayer.Services
                     break;
             }
 
-            return await PagedList<UserInfo>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
+            return await PagedList<UserInfo>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
         public async Task<ServiceResponseModel<UserInfoModel>> GetUserByName(string userName)

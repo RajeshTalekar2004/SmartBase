@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using SmartBase.BusinessLayer.Core.Domain;
+﻿using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Services.Interfaces
 {
     public interface ILedgerService
     {
         Task<ServiceResponseModel<IEnumerable<LedgerModel>>> GetAll(LedgerModel ledgerModel);
-        Task<PagedList<Ledger>> GetAll(LedgerParams iedgerParams);
-
+        Task<PagedList<Ledger>> GetAll(PageParams pageParams, LedgerModel getledgerModel);
         Task<ServiceResponseModel<IEnumerable<LedgerModel>>> GetByCode(LedgerModel editLedgerModel);
         Task<ServiceResponseModel<LedgerModel>> Add(LedgerModel newLedgerModel);
         Task<ServiceResponseModel<LedgerModel>> Edit(LedgerModel editLedgerModel);

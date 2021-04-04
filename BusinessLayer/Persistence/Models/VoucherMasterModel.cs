@@ -32,6 +32,7 @@ namespace SmartBase.BusinessLayer.Persistence.Models
         public int? IgstId { get; set; }
         public decimal? IgstAmount { get; set; }
         public string SortAccountBy { get; set; }
+        public string OrderBy { get; set; } = "vouNo";
 
         public virtual AccountMasterModel AccountMaster { get; set; }
         public virtual BillMasterModel BillMaster { get; set; }

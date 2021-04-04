@@ -15,7 +15,7 @@ namespace SmartBase.BusinessLayer.Persistence.Models
         public int CgstId { get; set; }
         public string CgstDetail { get; set; }
         public decimal CgstRate { get; set; }
-
+        public string OrderBy { get; set; } = "cgstId";
         public virtual ICollection<VoucherMasterModel> VoucherMasters { get; set; }
     }
 }

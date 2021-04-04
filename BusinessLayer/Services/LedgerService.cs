@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
 using SmartBase.BusinessLayer.Services.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System;
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Data.SqlClient;
-using SmartBase.BusinessLayer.Persistence.PageParams;
+using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Services
 {
@@ -79,13 +77,13 @@ namespace SmartBase.BusinessLayer.Services
             return serviceResponse;
         }
 
-        public async Task<PagedList<Ledger>> GetAll(LedgerParams ledgerParams)
+        public async Task<PagedList<Ledger>> GetAll(PageParams pageParams, LedgerModel getledgerModel)
         {
             var query = _context.Ledgers
-                        .Where(a=>a.CompCode==ledgerParams.CompCode && a.AccYear == ledgerParams.AccYear) 
+                        .Where(a=>a.CompCode== getledgerModel.CompCode && a.AccYear == getledgerModel.AccYear) 
                         .AsQueryable();
 
-            switch (ledgerParams.OrderBy)
+            switch (getledgerModel.OrderBy)
             {
                 case "vouNo":
                     query = query.OrderBy(c => c.CompCode).ThenBy(c=>c.AccYear).ThenBy(c=>c.VouNo);
@@ -101,7 +99,7 @@ namespace SmartBase.BusinessLayer.Services
                     break;
             }
 
-            return await PagedList<Ledger>.CreateAsync(query, ledgerParams.PageNumber, ledgerParams.PageSize);
+            return await PagedList<Ledger>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
 

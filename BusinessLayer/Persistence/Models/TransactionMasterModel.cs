@@ -18,7 +18,7 @@ namespace SmartBase.BusinessLayer.Persistence.Models
         public string AccountId1 { get; set; }
         public string AccountId2 { get; set; }
         public string AccountId3 { get; set; }
-
+        public string OrderBy { get; set; } = "trxId";
         public virtual ICollection<TypeMasterModel> TypeMasters { get; set; }
     }
 }

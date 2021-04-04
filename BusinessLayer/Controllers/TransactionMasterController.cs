@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using SmartBase.BusinessLayer.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -151,11 +151,22 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <returns></returns>
         [Route("GetAllByPage")]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] TransactionParams transactionParams)
+        public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] TransactionMasterModel getTransactionMaster)
         {
-            var transactionList = await _transactionMasterService.GetAll(transactionParams);
-            Response.AddPaginationHeader(transactionList.CurrentPage, transactionList.PageSize, transactionList.TotalCount, transactionList.TotalPages);
-            return Ok(transactionList);
+            ServiceResponseModel<IEnumerable<TransactionMaster>> response = new ServiceResponseModel<IEnumerable<TransactionMaster>>();
+            try
+            {
+                var transactionList = await _transactionMasterService.GetAll(pageParams, getTransactionMaster);
+                Response.AddPaginationHeader(transactionList.CurrentPage, transactionList.PageSize, transactionList.TotalCount, transactionList.TotalPages);
+                response.Data=transactionList;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return Ok(response);
         }
 
         /// <summary>

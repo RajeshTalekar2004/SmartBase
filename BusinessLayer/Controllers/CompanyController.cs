@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SmartBase.BusinessLayer.Core.Domain;
+using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
 using SmartBase.BusinessLayer.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
-using Microsoft.AspNetCore.Authorization;
-using SmartBase.BusinessLayer.Persistence.PageParams;
-using SmartBase.BusinessLayer.Persistence;
 
 namespace SmartBase.BusinessLayer.Controllers
 {
@@ -65,15 +65,26 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <returns></returns>
         [Route("GetAllByPage")]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] CompInfoParams compInfoParams)
+        public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] CompanyModel getCompany)
         {
-            if (string.IsNullOrWhiteSpace(compInfoParams.CompCode))
+            ServiceResponseModel<IEnumerable<CompInfo>> response = new ServiceResponseModel<IEnumerable<CompInfo>>();
+            try
             {
-                throw new ArgumentNullException("CompCode is required");
+                if (string.IsNullOrWhiteSpace(getCompany.CompCode))
+                {
+                    throw new ArgumentNullException("CompCode is required");
+                }
+                var compList = await _companyService.GetAll(pageParams, getCompany);
+                Response.AddPaginationHeader(compList.CurrentPage, compList.PageSize, compList.TotalCount, compList.TotalPages);
+                response.Data = compList;
             }
-            var compList = await _companyService.GetAll(compInfoParams);
-            Response.AddPaginationHeader(compList.CurrentPage, compList.PageSize, compList.TotalCount, compList.TotalPages);
-            return Ok(compList);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return Ok(response);
         }
 
 
@@ -83,8 +94,8 @@ namespace SmartBase.BusinessLayer.Controllers
         /// </summary>
         /// <param name="compId"></param>
         /// <returns></returns>
-        [HttpGet()]
         [Route("GetCompanyByCode")]
+        [HttpGet()]
         public async Task<IActionResult> GetCompanyByCode([FromBody] CompanyModel editCompany)
         {
             ServiceResponseModel<CompanyModel> response = new ServiceResponseModel<CompanyModel>();

@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Logging;
 using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using SmartBase.BusinessLayer.Services.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -78,13 +75,13 @@ namespace SmartBase.BusinessLayer.Services
         }
 
 
-        public async Task<PagedList<TypeMaster>> GetAll(TypeParams typeParams)
+        public async Task<PagedList<TypeMaster>> GetAll(PageParams pageParams, TypeMasterModel getTypeMasterModel)
         {
             var query = _context.TypeMasters
-                        .Where(a=>a.CompCode==typeParams.CompCode && a.AccYear == typeParams.AccYear)
+                        .Where(a=>a.CompCode== getTypeMasterModel.CompCode && a.AccYear == getTypeMasterModel.AccYear)
                         .AsQueryable();
 
-            switch (typeParams.OrderBy)
+            switch (getTypeMasterModel.OrderBy)
             {
                 case "trxCd":
                     query = query.OrderBy(c => c.CompCode).ThenBy(c => c.AccYear).ThenBy(c=>c.TrxCd);
@@ -97,7 +94,7 @@ namespace SmartBase.BusinessLayer.Services
                     break;
             }
 
-            return await PagedList<TypeMaster>.CreateAsync(query, typeParams.PageNumber, typeParams.PageSize);
+            return await PagedList<TypeMaster>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
 

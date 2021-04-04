@@ -21,6 +21,7 @@ namespace SmartBase.BusinessLayer.Persistence.Models
         public decimal? CurDr { get; set; }
         public decimal? CurCr { get; set; }
         public decimal? Closing { get; set; }
+        public string OrderBy { get; set; } = "accountId";
 
         public virtual ICollection<VoucherDetailModel> VoucherDetails { get; set; }
         public virtual ICollection<VoucherMasterModel> VoucherMasters { get; set; }

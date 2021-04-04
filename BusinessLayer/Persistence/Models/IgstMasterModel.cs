@@ -15,7 +15,7 @@ namespace SmartBase.BusinessLayer.Persistence.Models
         public int IgstId { get; set; }
         public string IgstDetail { get; set; }
         public decimal IgstRate { get; set; }
-
+        public string OrderBy { get; set; } = "igstId";
         public virtual ICollection<VoucherMasterModel> VoucherMasters { get; set; }
     }
 }

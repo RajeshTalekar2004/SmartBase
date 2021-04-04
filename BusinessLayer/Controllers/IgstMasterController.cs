@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using SmartBase.BusinessLayer.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -58,11 +58,22 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <returns></returns>
         [Route("GetAllByPage")]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] IgstParams igstParams)
+        public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] IgstMasterModel getIgstMaster)
         {
-            var igstList = await _igstService.GetAll(igstParams);
-            Response.AddPaginationHeader(igstList.CurrentPage, igstList.PageSize, igstList.TotalCount, igstList.TotalPages);
-            return Ok(igstList);
+            ServiceResponseModel<IEnumerable<IgstMaster>> response = new ServiceResponseModel<IEnumerable<IgstMaster>>();
+            try
+            {
+                var igstList = await _igstService.GetAll(pageParams, getIgstMaster);
+                Response.AddPaginationHeader(igstList.CurrentPage, igstList.PageSize, igstList.TotalCount, igstList.TotalPages);
+                response.Data = igstList;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return Ok(response);
         }
 
 

@@ -1,7 +1,6 @@
 ﻿using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,7 +10,7 @@ namespace SmartBase.BusinessLayer.Services.Interfaces
     {
         Task<ServiceResponseModel<IEnumerable<BillDetailModel>>> GetAll(BillDetailModel getBillDetailModel);
 
-        Task<PagedList<BillDetail>> GetAll(BillParams billParams);
+        Task<PagedList<BillDetail>> GetAll(PageParams pageParams, BillDetailModel getBillDetailModel);
 
         Task<ServiceResponseModel<IEnumerable<BillDetailModel>>> GetBillId(BillDetailModel getBillDetailModel);
 

@@ -1,6 +1,6 @@
-﻿namespace SmartBase.BusinessLayer.Persistence.PageParams
+﻿namespace SmartBase.BusinessLayer.Persistence
 {
-    public class AccountParams
+    public class PageParams
     {
         private const int MaxPageSize = 50;
         public int PageNumber { get; set; } = 1;
@@ -13,6 +13,6 @@
         }
 
         public string SearchBy { get; set; }
-        public string OrderBy { get; set; } = "accountId";
+       
     }
 }

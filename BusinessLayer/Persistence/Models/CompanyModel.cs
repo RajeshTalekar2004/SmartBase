@@ -19,6 +19,7 @@ namespace SmartBase.BusinessLayer.Persistence.Models
         public string AutoVoucher { get; set; }
         public string BillMatch { get; set; }
         public string Address { get; set; }
+        public string OrderBy { get; set; } = "CompCode";
 
         public virtual ICollection<VoucherMasterModel> VoucherMasters { get; set; }
 

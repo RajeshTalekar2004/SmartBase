@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using SmartBase.BusinessLayer.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Controllers
@@ -198,22 +195,31 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <returns></returns>
         [Route("GetAllByPage")]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] LedgerParams ledgerParams)
+        public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] LedgerModel getledgerModel)
         {
-            if (string.IsNullOrWhiteSpace(ledgerParams.CompCode))
+            ServiceResponseModel<IEnumerable<Ledger>> response = new ServiceResponseModel<IEnumerable<Ledger>>();
+            try
             {
-                throw new ArgumentNullException("CompCode is required");
+                if (string.IsNullOrWhiteSpace(getledgerModel.CompCode))
+                {
+                    throw new ArgumentNullException("CompCode is required");
+                }
+                if (string.IsNullOrWhiteSpace(getledgerModel.AccYear))
+                {
+                    throw new ArgumentNullException("AccYear is required");
+                }
+                var ledgerList = await _ledgerService.GetAll(pageParams, getledgerModel);
+                Response.AddPaginationHeader(ledgerList.CurrentPage, ledgerList.PageSize, ledgerList.TotalCount, ledgerList.TotalPages);
+                response.Data = ledgerList;
             }
-            if (string.IsNullOrWhiteSpace(ledgerParams.AccYear))
+            catch (Exception ex)
             {
-                throw new ArgumentNullException("AccYear is required");
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
             }
-            var ledgerList = await _ledgerService.GetAll(ledgerParams);
-            Response.AddPaginationHeader(ledgerList.CurrentPage, ledgerList.PageSize, ledgerList.TotalCount, ledgerList.TotalPages);
-            return Ok(ledgerList);
+            return Ok(response);
         }
-
-
 
 
         /// <summary>

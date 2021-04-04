@@ -16,7 +16,7 @@ namespace SmartBase.BusinessLayer.Persistence.Models
         public decimal Amount { get; set; }
         public string VouDetail { get; set; }
         public string SortAccountBy { get; set; }
-
+        public string OrderBy { get; set; } = "vouNo";
         public virtual AccountMasterModel AccountMaster { get; set; }
         public virtual VoucherMasterModel VoucherMaster { get; set; }
     }

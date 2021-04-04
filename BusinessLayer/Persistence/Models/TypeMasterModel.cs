@@ -18,7 +18,7 @@ namespace SmartBase.BusinessLayer.Persistence.Models
         public string TrxDetail { get; set; }
         public string Prefix { get; set; }
         public int? ItemSr { get; set; }
-
+        public string OrderBy { get; set; } = "TrxCd";
         public virtual TransactionMasterModel TrxCdNavigation { get; set; }
         public virtual ICollection<VoucherMasterModel> VoucherMasters { get; set; }
     }

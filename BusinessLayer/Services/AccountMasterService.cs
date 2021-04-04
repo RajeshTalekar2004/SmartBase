@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Logging;
 using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using SmartBase.BusinessLayer.Services.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -123,13 +120,13 @@ namespace SmartBase.BusinessLayer.Services
             return serviceResponse;
         }
 
-        public async Task<PagedList<AccountMaster>> GetAll(AccountParams accountParams)
+        public async Task<PagedList<AccountMaster>> GetAll(PageParams pageParams, AccountMasterModel accountMasterModel)
         {
             var query = _context.AccountMasters
-                        .Where(a=>a.CompCode==accountParams.CompCode && a.AccYear == accountParams.AccYear) 
+                        .Where(a=>a.CompCode== accountMasterModel.CompCode && a.AccYear == accountMasterModel.AccYear) 
                         .AsQueryable();
 
-            switch (accountParams.OrderBy)
+            switch (accountMasterModel.OrderBy)
             {
                 case "accountId":
                     query = query.OrderBy(c => c.CompCode).ThenBy(c=>c.AccYear).ThenBy(c=>c.AccountId);
@@ -142,7 +139,7 @@ namespace SmartBase.BusinessLayer.Services
                     break;
             }
 
-            return await PagedList<AccountMaster>.CreateAsync(query, accountParams.PageNumber, accountParams.PageSize);
+            return await PagedList<AccountMaster>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
         public UnitOfWork UnitOfWork

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 using SmartBase.BusinessLayer.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -67,21 +67,32 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <returns></returns>
         [Route("GetAllByPage")]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] BillParams billParams)
+        public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] BillMasterModel getBillMasterModel)
         {
-            if (string.IsNullOrWhiteSpace(billParams.CompCode))
+            ServiceResponseModel<IEnumerable<BillMaster>> response = new ServiceResponseModel<IEnumerable<BillMaster>>();
+            try
             {
-                throw new ArgumentNullException("CompCode is required");
+                if (string.IsNullOrWhiteSpace(getBillMasterModel.CompCode))
+                {
+                    throw new ArgumentNullException("CompCode is required");
+                }
+                if (string.IsNullOrWhiteSpace(getBillMasterModel.AccYear))
+                {
+                    throw new ArgumentNullException("AccYear is required");
+                }
+                var billMasterList = await _billMasterService.GetAll(pageParams, getBillMasterModel);
+                Response.AddPaginationHeader(billMasterList.CurrentPage, billMasterList.PageSize, billMasterList.TotalCount, billMasterList.TotalPages);
+                response.Data = billMasterList;
             }
-            if (string.IsNullOrWhiteSpace(billParams.AccYear))
+            catch (System.Exception ex)
             {
-                throw new ArgumentNullException("AccYear is required");
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
             }
-            var billMasterList = await _billMasterService.GetAll(billParams);
-            Response.AddPaginationHeader(billMasterList.CurrentPage, billMasterList.PageSize, billMasterList.TotalCount, billMasterList.TotalPages);
-            return Ok(billMasterList);
-        }
 
+            return Ok(response);
+        }
 
         /// <summary>
         /// Get Bill master record. CompCode + AccYear + AccountId + BillId required field

@@ -1,14 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
 using SmartBase.BusinessLayer.Core.Domain;
-using SmartBase.BusinessLayer.Persistence;
+using SmartBase.BusinessLayer.Persistence.Models;
 using SmartBase.BusinessLayer.Services.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using SmartBase.BusinessLayer.Persistence.Models;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 
 namespace SmartBase.BusinessLayer.Persistence
 {
@@ -70,11 +66,11 @@ namespace SmartBase.BusinessLayer.Persistence
             return serviceResponse;
         }
 
-        public async Task<PagedList<TransactionMaster>> GetAll(TransactionParams transactionParams)
+        public async Task<PagedList<TransactionMaster>> GetAll(PageParams pageParams, TransactionMasterModel getTransactionMaster)
         {
             var query = _context.TransactionMasters.AsQueryable();
 
-            switch (transactionParams.OrderBy)
+            switch (getTransactionMaster.OrderBy)
             {
                 case "trxId":
                     query = query.OrderBy(c => c.TrxId);
@@ -84,7 +80,7 @@ namespace SmartBase.BusinessLayer.Persistence
                     break;
             }
 
-            return await PagedList<TransactionMaster>.CreateAsync(query, transactionParams.PageNumber, transactionParams.PageSize);
+            return await PagedList<TransactionMaster>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
 

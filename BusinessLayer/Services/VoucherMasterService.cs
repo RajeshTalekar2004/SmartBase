@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SmartBase.BusinessLayer.Core.Domain;
 using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
 using SmartBase.BusinessLayer.Services.Interfaces;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using SmartBase.BusinessLayer.Persistence.PageParams;
 
 namespace SmartBase.BusinessLayer.Services
 {
@@ -560,14 +559,14 @@ namespace SmartBase.BusinessLayer.Services
 
 
 
-        public async Task<PagedList<VoucherMaster>> GetAll(VoucherParams voucherParams)
+        public async Task<PagedList<VoucherMaster>> GetAll(PageParams pageParams, VoucherMasterModel getVoucherMasterModel)
         {
             var query = _context.VoucherMasters
-                        .Where(a=>a.CompCode==voucherParams.CompCode && a.AccYear == voucherParams.AccYear 
-                        && a.TrxType == voucherParams.TrxType) 
+                        .Where(a=>a.CompCode== getVoucherMasterModel.CompCode && a.AccYear == getVoucherMasterModel.AccYear 
+                        && a.TrxType == getVoucherMasterModel.TrxType) 
                         .AsQueryable();
 
-            switch (voucherParams.OrderBy)
+            switch (getVoucherMasterModel.OrderBy)
             {
                 case "vouNo":
                     query = query.OrderBy(c => c.CompCode).ThenBy(c=>c.AccYear).ThenBy(c=>c.VouNo).ThenBy(c=>c.VouDate);
@@ -579,7 +578,7 @@ namespace SmartBase.BusinessLayer.Services
                     query = query.OrderBy(c => c.CompCode).ThenBy(c => c.AccYear).ThenBy(c => c.VouNo).ThenBy(c => c.VouDate);
                     break;
             }
-            return await PagedList<VoucherMaster>.CreateAsync(query, voucherParams.PageNumber, voucherParams.PageSize);
+            return await PagedList<VoucherMaster>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
 

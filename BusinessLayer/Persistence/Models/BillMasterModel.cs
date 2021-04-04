@@ -21,7 +21,7 @@ namespace SmartBase.BusinessLayer.Persistence.Models
         public decimal Amount { get; set; }
         public decimal? Adjusted { get; set; }
         public decimal? Balance { get; set; }
-
+        public string OrderBy { get; set; } = "billId";
         public virtual ICollection<BillDetailModel> BillDetails { get; set; }
         public virtual ICollection<VoucherMasterModel> VoucherMasters { get; set; }
     }

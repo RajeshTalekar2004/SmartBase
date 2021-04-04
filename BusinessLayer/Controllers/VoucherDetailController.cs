@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SmartBase.BusinessLayer.Core.Domain;
+using SmartBase.BusinessLayer.Persistence;
 using SmartBase.BusinessLayer.Persistence.Models;
 using SmartBase.BusinessLayer.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
-using Microsoft.AspNetCore.Authorization;
-using SmartBase.BusinessLayer.Persistence.PageParams;
-using SmartBase.BusinessLayer.Persistence;
 
 namespace SmartBase.BusinessLayer.Controllers
 {
@@ -117,10 +117,17 @@ namespace SmartBase.BusinessLayer.Controllers
         [HttpPut("Edit")]
         public async Task<IActionResult> Edit(VoucherDetailModel editVoucherDetailModel)
         {
-            ServiceResponseModel<VoucherDetailModel> response = await _voucherDetailService.Edit(editVoucherDetailModel);
-            if (response.Data == null)
+            ServiceResponseModel<VoucherDetailModel> response = new ServiceResponseModel<VoucherDetailModel>();
+
+            try
             {
-                return NotFound(response);
+                response = await _voucherDetailService.Edit(editVoucherDetailModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
             }
             return Ok(response);
         }
@@ -134,10 +141,16 @@ namespace SmartBase.BusinessLayer.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(VoucherDetailModel editVoucherDetailModel)
         {
-            ServiceResponseModel<IEnumerable<VoucherDetailModel>> response = await _voucherDetailService.GetAll(editVoucherDetailModel);
-            if (response.Data == null)
+            ServiceResponseModel<IEnumerable<VoucherDetailModel>> response = new ServiceResponseModel<IEnumerable<VoucherDetailModel>>();
+            try
             {
-                return NotFound(response);
+                response = await _voucherDetailService.GetAll(editVoucherDetailModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
             }
             return Ok(response);
         }
@@ -148,19 +161,30 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <returns></returns>
         [Route("GetAllByPage")]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] VoucherDetailParams voucherDetailParams)
+        public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, VoucherDetailModel getVoucherDetailModel)
         {
-            if (string.IsNullOrWhiteSpace(voucherDetailParams.CompCode))
+            ServiceResponseModel<IEnumerable<VoucherDetail>> response = new ServiceResponseModel<IEnumerable<VoucherDetail>>();
+            try
             {
-                throw new ArgumentNullException("CompCode is required");
+                if (string.IsNullOrWhiteSpace(getVoucherDetailModel.CompCode))
+                {
+                    throw new ArgumentNullException("CompCode is required");
+                }
+                if (string.IsNullOrWhiteSpace(getVoucherDetailModel.AccYear))
+                {
+                    throw new ArgumentNullException("AccYear is required");
+                }
+                var vouDetailList = await _voucherDetailService.GetAll(pageParams, getVoucherDetailModel);
+                Response.AddPaginationHeader(vouDetailList.CurrentPage, vouDetailList.PageSize, vouDetailList.TotalCount, vouDetailList.TotalPages);
+                response.Data = vouDetailList;
             }
-            if (string.IsNullOrWhiteSpace(voucherDetailParams.AccYear))
+            catch (Exception ex)
             {
-                throw new ArgumentNullException("AccYear is required");
+                _logger.LogError(ex.StackTrace);
+                response.Success = false;
+                response.Message = ex.Message;
             }
-            var vouDetailList = await _voucherDetailService.GetAll(voucherDetailParams);
-            Response.AddPaginationHeader(vouDetailList.CurrentPage, vouDetailList.PageSize, vouDetailList.TotalCount, vouDetailList.TotalPages);
-            return Ok(vouDetailList);
+            return Ok(response);
         }
 
 
