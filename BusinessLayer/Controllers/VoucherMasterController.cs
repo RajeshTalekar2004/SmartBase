@@ -147,9 +147,9 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// Edit Voucher Master CompCode+AccYear+TrxType is required field
+        /// 
         /// </summary>
-        /// <param name="editVoucherMasterModel"></param>
+        /// <param name="getVoucherMasterModel"></param>
         /// <returns></returns>
         [Route("GetByVouNo")]
         [HttpGet]

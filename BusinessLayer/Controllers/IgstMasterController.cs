@@ -80,7 +80,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <summary>
         /// Get IGST by Id
         /// </summary>
-        /// <param name="igstId"></param>
+        /// <param name="editIgstMaster"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("{igstId}")]
@@ -182,6 +182,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <summary>
         /// Edit IGST code
         /// </summary>
+        /// <param name="editIgstMaster"></param>
         /// <param name="newIgstMaster"></param>
         /// <returns></returns>
         [HttpPut("Edit")]

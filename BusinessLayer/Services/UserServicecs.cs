@@ -27,6 +27,7 @@ namespace SmartBase.BusinessLayer.Services
         }
 
         public SmartAccountContext _context { get; }
+        public IConfiguration Configuration { get; }
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly ILogger<UserServicecs> _logger;
@@ -149,31 +150,34 @@ namespace SmartBase.BusinessLayer.Services
 
         private string CreateToken(UserInfo userinfo)
         {
-            List<Claim> claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, userinfo.CompCode),
-                new Claim(ClaimTypes.Name, userinfo.UserName),
-                new Claim(ClaimTypes.Email, userinfo.UserEmailId),
-                new Claim(ClaimTypes.Role, "Admin") //TODO Fix this defaulted to admin role
-            };
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:JwtToken").Value)
+              Encoding.UTF8.GetBytes(_configuration["JwtSettings:key"]));
+
+            // Create standard JWT claims
+            List<Claim> jwtClaims = new List<Claim>();
+            jwtClaims.Add(new Claim(JwtRegisteredClaimNames.Sub,userinfo.UserName));
+            jwtClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+
+            // Add custom claims
+            jwtClaims.Add(new Claim("CanAddProduct", "true"));
+            jwtClaims.Add(new Claim("CanSaveProduct", "true"));
+            jwtClaims.Add(new Claim("CanAddCategory", "true"));
+
+            // Create the JwtSecurityToken object
+            var token = new JwtSecurityToken(
+              issuer: _configuration["JwtSettings:key"],
+              audience: _configuration["JwtSettings:audience"],
+              claims: jwtClaims,
+              notBefore: DateTime.UtcNow,
+              expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(
+                _configuration["JwtSettings:minutesToExpiration"])),signingCredentials: new SigningCredentials(key,SecurityAlgorithms.HmacSha256)
             );
 
-            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            // Create a string representation of the Jwt token
+            return new JwtSecurityTokenHandler().WriteToken(token); ;
 
-            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(double.Parse(_configuration["AppSettings:AccessExpireMinutes"])),
-                SigningCredentials = creds,
-            };
 
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
         }
 
         public async Task<ServiceResponseModel<UserInfoModel>> RefreshToken(UserInfoModel user)

@@ -24,6 +24,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// Initilize CGST account controller
         /// </summary>
         /// <param name="cstMasterService"></param>
+        /// <param name="logger"></param>
         public CgstMasterController(ICgstMasterService cstMasterService, ILogger<CgstMasterController> logger)
         {
             _cgstMasterService = cstMasterService;
@@ -83,9 +84,9 @@ namespace SmartBase.BusinessLayer.Controllers
 
 
         /// <summary>
-        /// Get CGST by code
+        /// 
         /// </summary>
-        /// <param name="cgstId"></param>
+        /// <param name="cgstModel"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("{cgstId}")]

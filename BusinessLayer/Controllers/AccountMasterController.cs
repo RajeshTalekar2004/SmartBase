@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Controllers
 {
+    /// <summary>
+    /// Manage Financial account master
+    /// </summary>   
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
@@ -23,6 +26,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// Initialize account master controller
         /// </summary>
         /// <param name="accountMasterService"></param>
+        /// <param name="logger"></param>
         public AccountMasterController(IAccountMasterService accountMasterService, ILogger<AccountMasterController> logger)
         {
             _accountMasterService = accountMasterService;

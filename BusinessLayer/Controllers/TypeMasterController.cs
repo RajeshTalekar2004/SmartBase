@@ -14,6 +14,9 @@ namespace SmartBase.BusinessLayer.Controllers
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
+    /// <summary>
+    /// Manage Trx types
+    /// </summary>
     public class TypeMasterController : ControllerBase
     {
         private ITypeMasterService _typeMasterService;
@@ -23,6 +26,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// Initilize type controller
         /// </summary>
         /// <param name="typeMasterService"></param>
+        /// <param name="logger"></param>
         public TypeMasterController(ITypeMasterService typeMasterService, ILogger<TransactionMasterController> logger)
         {
             _typeMasterService = typeMasterService;

@@ -23,6 +23,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// 
         /// </summary>
         /// <param name="transactionMasterService"></param>
+        /// <param name="logger"></param>
         public TransactionMasterController(ITransactionMasterService transactionMasterService, ILogger<TransactionMasterController> logger)
         {
             _transactionMasterService = transactionMasterService;

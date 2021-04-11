@@ -16,16 +16,17 @@ namespace SmartBase.BusinessLayer.Controllers
     /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class CompanyController : ControllerBase
     {
         private readonly ILogger<CompanyController> _logger;
         public ICompanyService _companyService { get; }
 
         /// <summary>
-        /// Initialize company controller
+        /// 
         /// </summary>
         /// <param name="companyService"></param>
+        /// <param name="logger"></param>
         public CompanyController(ICompanyService companyService, ILogger<CompanyController> logger)
         {
             _companyService = companyService;
@@ -90,9 +91,9 @@ namespace SmartBase.BusinessLayer.Controllers
 
 
         /// <summary>
-        /// Get company by CompId. 
+        /// 
         /// </summary>
-        /// <param name="compId"></param>
+        /// <param name="editCompany"></param>
         /// <returns></returns>
         [Route("GetCompanyByCode")]
         [HttpGet()]
@@ -117,9 +118,9 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// Delete company by Id
+        /// 
         /// </summary>
-        /// <param name="compId"></param>
+        /// <param name="ByCode"></param>
         /// <returns></returns>
         [HttpDelete("{ByCode}")]
         public async Task<IActionResult> Delete(string ByCode)

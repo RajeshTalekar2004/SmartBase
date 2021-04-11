@@ -1,0 +1,6 @@
+C:\Rajesh\yashraj\SmartBase\Database\bin\Debug\SmartBase.Database.dacpac
+C:\Rajesh\yashraj\SmartBase\Database\bin\Debug\SmartBase.Database.dll
+C:\Rajesh\yashraj\SmartBase\Database\bin\Debug\SmartBase.Database.pdb
+C:\Rajesh\yashraj\SmartBase\Database\obj\Debug\SmartBase.Database.sqlprojAssemblyReference.cache
+C:\Rajesh\yashraj\SmartBase\Database\obj\Debug\SmartBase.Database.dll
+C:\Rajesh\yashraj\SmartBase\Database\obj\Debug\SmartBase.Database.pdb

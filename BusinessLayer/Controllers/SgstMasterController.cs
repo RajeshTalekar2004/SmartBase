@@ -21,9 +21,10 @@ namespace SmartBase.BusinessLayer.Controllers
         public ILogger<SgstMasterController> _logger { get; }
 
         /// <summary>
-        /// Initilize SGST Controller
+        /// 
         /// </summary>
         /// <param name="sgstService"></param>
+        /// <param name="logger"></param>
         public SgstMasterController(ISgstMasterService sgstService, ILogger<SgstMasterController> logger)
         {
             _sgstService = sgstService;
@@ -83,9 +84,9 @@ namespace SmartBase.BusinessLayer.Controllers
 
 
         /// <summary>
-        /// Get CGST by Id
+        /// 
         /// </summary>
-        /// <param name="sgstId"></param>
+        /// <param name="editSgstMaster"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("{sgstId}")]
@@ -185,9 +186,9 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// Edit SGST code
+        /// 
         /// </summary>
-        /// <param name="newSgstMaster"></param>
+        /// <param name="editSgstMaster"></param>
         /// <returns></returns>
         [HttpPut("Edit")]
         public async Task<IActionResult> Edit([FromBody] SgstMasterModel editSgstMaster)

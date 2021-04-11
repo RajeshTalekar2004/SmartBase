@@ -23,6 +23,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// Initiate user controller
         /// </summary>
         /// <param name="userService"></param>
+        /// <param name="logger"></param>
         public UserController(IUserService userService,ILogger<TransactionMasterController> logger)
         {
             _userService = userService;
