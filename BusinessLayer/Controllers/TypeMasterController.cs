@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Controllers
 {
+    /// <summary>
+    /// This controller is used for managing voucher Serial number
+    /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
@@ -155,7 +158,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("GetAll")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll(TypeMasterModel editTypeMasterModel)
         {
             ServiceResponseModel<IEnumerable<TypeMasterModel>> response = new ServiceResponseModel<IEnumerable<TypeMasterModel>>();
@@ -186,11 +189,13 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// Get all TypeMaster by trdCd,trxDetail
+        /// Get all TypeMaster by trdCd,trxDetail. Required => CompCode+AccYear
         /// </summary>
+        /// <param name="pageParams"></param>
+        /// <param name="getTypeMasterModel"></param>
         /// <returns></returns>
         [Route("GetAllByPage")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] TypeMasterModel getTypeMasterModel)
         {
             ServiceResponseModel<IEnumerable<TypeMaster>> response = new ServiceResponseModel<IEnumerable<TypeMaster>>();
@@ -218,6 +223,11 @@ namespace SmartBase.BusinessLayer.Controllers
 
         }
 
+        /// <summary>
+        /// Get Type by code. Required => CompCode+AccYear+TrxCd
+        /// </summary>
+        /// <param name="typeMasterModel"></param>
+        /// <returns></returns>
         [Route("GetTypeByCode")]
         [HttpGet]
         public  async Task<IActionResult>  GetTypeByCode(TypeMasterModel typeMasterModel)

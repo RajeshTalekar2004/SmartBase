@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Controllers
 {
+    /// <summary>
+    /// This controller is used for CRUD and paging for Ledger. This is not interacted by user.
+    /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
@@ -159,7 +162,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <param name="ledgerModel"></param>
         /// <returns></returns>
         [Route("GetAll")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll([FromBody] LedgerModel ledgerModel)
         {
 
@@ -194,7 +197,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("GetAllByPage")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] LedgerModel getledgerModel)
         {
             ServiceResponseModel<IEnumerable<Ledger>> response = new ServiceResponseModel<IEnumerable<Ledger>>();
@@ -228,7 +231,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <param name="editLedgerModel"></param>
         /// <returns></returns>
         [Route("GetByCode")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetByCode([FromBody] LedgerModel editLedgerModel)
         {
 
@@ -298,7 +301,11 @@ namespace SmartBase.BusinessLayer.Controllers
             return Ok(response);
         }
 
-
+        /// <summary>
+        /// Generate ledger. Required => CompCode+AccYear+StartDate+StartAccount+FinishAccount
+        /// </summary>
+        /// <param name="reportModel"></param>
+        /// <returns></returns>
         [HttpPost("GeneralLedger")]
         public async Task<IActionResult> GeneralLedger([FromBody] ReportModel reportModel)
         {
@@ -342,8 +349,14 @@ namespace SmartBase.BusinessLayer.Controllers
             return Ok(response);
         }
 
-
-        [HttpPost("SaleRegister")]
+        /// <summary>
+        /// Generate Sales or Purchase Register. Required=>CompCode+AccYear+StartDate+SaleOrPurchaseType.
+        /// SaleOrPurchaseType = 'P' for purchase register
+        /// SaleOrPurchaseType = 'S' for sales register
+        /// </summary>
+        /// <param name="reportModel"></param>
+        /// <returns></returns>
+        [HttpPost("SaleOrPurchaseRegister")]
         public async Task<IActionResult> SaleRegister([FromBody] ReportModel reportModel)
         {
             ServiceResponseModel<SalePurchaseReportModel> response = new ServiceResponseModel<SalePurchaseReportModel>();
@@ -380,8 +393,5 @@ namespace SmartBase.BusinessLayer.Controllers
             }
             return Ok(response);
         }
-
-
-
     }
 }

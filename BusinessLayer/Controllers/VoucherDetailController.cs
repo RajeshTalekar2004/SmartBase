@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Controllers
 {
+    /// <summary>
+    /// This controller is used for CRUD and paging for Voucher Detail. But it will never required user interaction
+    /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
@@ -138,7 +141,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <param name="editVoucherDetailModel"></param>
         /// <returns></returns>
         [Route("GetAll")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll(VoucherDetailModel editVoucherDetailModel)
         {
             ServiceResponseModel<IEnumerable<VoucherDetailModel>> response = new ServiceResponseModel<IEnumerable<VoucherDetailModel>>();
@@ -158,9 +161,11 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <summary>
         /// Get all Voucher Details by vouNo,accountId
         /// </summary>
+        /// <param name="pageParams"></param>
+        /// <param name="getVoucherDetailModel"></param>
         /// <returns></returns>
         [Route("GetAllByPage")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, VoucherDetailModel getVoucherDetailModel)
         {
             ServiceResponseModel<IEnumerable<VoucherDetail>> response = new ServiceResponseModel<IEnumerable<VoucherDetail>>();
@@ -194,7 +199,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <param name="getVoucherDetailModel"></param>
         /// <returns></returns>
         [Route("GetByVouNo")]
-        [HttpGet]
+        [HttpPost]
         public  async Task<IActionResult>  GetByVouNo(VoucherDetailModel getVoucherDetailModel)
         {
             ServiceResponseModel<IEnumerable<VoucherDetailModel>> response = new ServiceResponseModel<IEnumerable<VoucherDetailModel>>();
@@ -237,7 +242,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <param name="getVoucherDetailModel"></param>
         /// <returns></returns>
         [Route("GetByVouNoItemSr")]
-        [HttpGet]
+        [HttpPost]
         public  async Task<IActionResult>  GetByVouNoItemSr(VoucherDetailModel getVoucherDetailModel)
         {
             ServiceResponseModel<VoucherDetailModel> response = new ServiceResponseModel<VoucherDetailModel>();

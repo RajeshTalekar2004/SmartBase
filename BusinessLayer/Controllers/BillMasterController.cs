@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Controllers
 {
+    /// <summary>
+    /// This controller is used for CRUD and paging for Bill Header matching
+    /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
@@ -30,7 +33,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <param name="getBillMasterModel"></param>
         /// <returns></returns>
         [Route("GetAll")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll([FromBody] BillMasterModel getBillMasterModel)
         {
             ServiceResponseModel<IEnumerable<BillMasterModel>> response = new ServiceResponseModel<IEnumerable<BillMasterModel>>();
@@ -62,11 +65,11 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// Get all Bill master by paging. Sort by billId,accountId,billDate
+        /// Get all Bill master by paging. Required => CompCode+AccYear. Sort by billId,accountId,billDate
         /// </summary>
         /// <returns></returns>
         [Route("GetAllByPage")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] BillMasterModel getBillMasterModel)
         {
             ServiceResponseModel<IEnumerable<BillMaster>> response = new ServiceResponseModel<IEnumerable<BillMaster>>();
@@ -100,7 +103,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <param name="billMasterId"></param>
         /// <returns></returns>
         [Route("GetBillId")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult>  GetBillId([FromBody] BillMasterModel billMasterId)
         {
             ServiceResponseModel<BillMasterModel> response = new ServiceResponseModel<BillMasterModel>();

@@ -9,7 +9,7 @@ using System.Linq;
 namespace SmartBase.BusinessLayer.Controllers
 {
     /// <summary>
-    /// Weather Controller responsible for GET/POST for managing weather
+    /// This is test controller to validate IIS service is working
     /// </summary>
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase

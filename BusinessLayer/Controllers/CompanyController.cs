@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 namespace SmartBase.BusinessLayer.Controllers
 {
     /// <summary>
-    /// 
+    /// This controller is used for CRUD and paging for Company information.
     /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class CompanyController : ControllerBase
     {
         private readonly ILogger<CompanyController> _logger;
@@ -63,9 +63,11 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <summary>
         /// Get all Company information by compCode,name
         /// </summary>
+        /// <param name="pageParams"></param>
+        /// <param name="getCompany"></param>
         /// <returns></returns>
         [Route("GetAllByPage")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] CompanyModel getCompany)
         {
             ServiceResponseModel<IEnumerable<CompInfo>> response = new ServiceResponseModel<IEnumerable<CompInfo>>();
@@ -91,12 +93,13 @@ namespace SmartBase.BusinessLayer.Controllers
 
 
         /// <summary>
-        /// 
+        /// Get company by code. Required=>CompCode
         /// </summary>
         /// <param name="editCompany"></param>
         /// <returns></returns>
         [Route("GetCompanyByCode")]
-        [HttpGet()]
+        //[HttpGet()]
+        [HttpPost]
         public async Task<IActionResult> GetCompanyByCode([FromBody] CompanyModel editCompany)
         {
             ServiceResponseModel<CompanyModel> response = new ServiceResponseModel<CompanyModel>();
@@ -118,7 +121,7 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// 
+        /// delte company. Required Company code 
         /// </summary>
         /// <param name="ByCode"></param>
         /// <returns></returns>
@@ -145,7 +148,7 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// Add new company
+        /// Add new company. Required =>CompCode,AccYear,Name
         /// </summary>
         /// <param name="newCompany"></param>
         /// <returns></returns>
@@ -184,7 +187,7 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// Edit Company
+        /// Edit Company. Required => CompCode+AccYear+Name 
         /// </summary>
         /// <param name="editCompany"></param>
         /// <returns></returns>
@@ -223,6 +226,11 @@ namespace SmartBase.BusinessLayer.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Create new year process. Required => CompCode+AccYear+NewYear
+        /// </summary>
+        /// <param name="newCompany"></param>
+        /// <returns></returns>
         [HttpPost("NewYear")]
         public async Task<IActionResult> NewYear([FromBody] CompanyNewYearModel newCompany)
         {

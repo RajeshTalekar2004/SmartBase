@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace SmartBase.BusinessLayer.Controllers
 {
     /// <summary>
-    /// Manage Financial account master
+    /// This controller is used for CRUD and paging for Account Master.
     /// </summary>   
     [Route("api/v1/[controller]")]
     [ApiController]
@@ -77,7 +77,7 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// Delete account
+        /// Delete account CompCode+AccYear+AccountId is required
         /// </summary>
         /// <param name="delAccountMaster"></param>
         /// <returns></returns>
@@ -161,11 +161,11 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// Get account by code. Required CompCode+year+AccountId
+        /// POST account by code. Required CompCode+year+AccountId
         /// </summary>
         /// <param name="editAccountMasterModel"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         [Route("ByCode")]
         public async Task<IActionResult> GetAccountByCode([FromBody] AccountMasterModel editAccountMasterModel)
         {
@@ -203,11 +203,11 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// Search AccountID start with wild card search. CompCode+year+AccountId
+        /// Post Search AccountID start with wild card search. CompCode+year+AccountId
         /// </summary>
         /// <param name="editAccountMasterModel"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         [Route("SearchByCode")]
         public async Task<IActionResult> SearchAccountByCode([FromBody] AccountMasterModel editAccountMasterModel)
         {
@@ -249,7 +249,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// </summary>
         /// <param name="editAccountMasterModel"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         [Route("ByName")]
         public async Task<IActionResult> GetAccountByName([FromBody] AccountMasterModel editAccountMasterModel)
         {
@@ -291,7 +291,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// </summary>
         /// <param name="editAccountMasterModel"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         [Route("SearchByName")]
         public async Task<IActionResult> SearchAccountByName([FromBody] AccountMasterModel editAccountMasterModel)
         {
@@ -332,7 +332,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <param name="editAccountMasterModel"></param>
         /// <returns></returns>
         [Route("GetAll")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll([FromBody] AccountMasterModel editAccountMasterModel)
         {
             ServiceResponseModel<IEnumerable<AccountMasterModel>> response = new  ServiceResponseModel<IEnumerable<AccountMasterModel>>();
@@ -365,9 +365,11 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <summary>
         /// Get all Account by accountId,name
         /// </summary>
+        /// <param name="pageParams"></param>
+        /// <param name="accountMasterModel"></param>
         /// <returns></returns>
         [Route("GetAllByPage")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams , [FromBody] AccountMasterModel accountMasterModel)
         {
             ServiceResponseModel<IEnumerable<AccountMaster>> response = new ServiceResponseModel<IEnumerable<AccountMaster>>();

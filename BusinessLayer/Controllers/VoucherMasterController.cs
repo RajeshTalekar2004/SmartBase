@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Controllers
 {
+    /// <summary>
+    /// This controller used for voucher entry CRUD / Paging
+    /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
@@ -25,7 +28,7 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Add new voucher. Required CompCode+AccYear
         /// </summary>
         /// <param name="newVoucherMasterModel"></param>
         /// <returns></returns>
@@ -116,12 +119,12 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// Edit Voucher Master CompCode+AccYear+TrxType is required field
+        /// Get Voucher Master CompCode+AccYear+TrxType is required field
         /// </summary>
         /// <param name="editVoucherMasterModel"></param>
         /// <returns></returns>
         [Route("GetByTrxType")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetByTrxType(VoucherMasterModel editVoucherMasterModel)
         {
             ServiceResponseModel<IEnumerable<VoucherMasterModel>> response = new ServiceResponseModel<IEnumerable<VoucherMasterModel>>();
@@ -147,12 +150,12 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// 
+        ///  Get Voucher Master CompCode+AccYear is required field
         /// </summary>
         /// <param name="getVoucherMasterModel"></param>
         /// <returns></returns>
         [Route("GetByVouNo")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetByVouNo(VoucherMasterModel getVoucherMasterModel)
         {
             ServiceResponseModel<VoucherMasterModel> response = new ServiceResponseModel<VoucherMasterModel>();
@@ -177,7 +180,11 @@ namespace SmartBase.BusinessLayer.Controllers
             return Ok(response);
         }
 
-
+        /// <summary>
+        /// Get account list by TrxCd. Required => CompCode+AccYear+TrxType
+        /// </summary>
+        /// <param name="getVoucherMasterModel"></param>
+        /// <returns></returns>
         [Route("GetAccountByTrxId")]
         [HttpGet]
         public async Task<IActionResult> GetAccountByTrxId([FromBody] VoucherMasterModel getVoucherMasterModel)
@@ -193,6 +200,10 @@ namespace SmartBase.BusinessLayer.Controllers
                 {
                     throw new ArgumentNullException("AccYear is required");
                 }
+                if (string.IsNullOrWhiteSpace(getVoucherMasterModel.TrxType))
+                {
+                    throw new ArgumentNullException("Trx type is required");
+                }
                 response = await _voucherMasterService.GetAccountByTrxId(getVoucherMasterModel);
             }
             catch (Exception ex)
@@ -205,11 +216,11 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// Get all Voucher Details by vouNo,accountId
+        /// Get all Voucher Details by vouNo,accountId. Required =>CompCode+AccYear+TrxType
         /// </summary>
         /// <returns></returns>
         [Route("GetAllByPage")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] VoucherMasterModel getVoucherMasterModel)
         {
             if (string.IsNullOrWhiteSpace(getVoucherMasterModel.CompCode))

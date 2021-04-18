@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Controllers
 {
+    /// <summary>
+    /// This controller use for user managemennt and token management.
+    /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -58,11 +61,11 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// Get all user info by userName, userEmailId
+        /// Get all user info by userName, userEmailId. Required => CompCode
         /// </summary>
         /// <returns></returns>
         [Route("GetAllByPage")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] UserInfoModel getUser)
         {
             ServiceResponseModel<IEnumerable<UserInfo>> response = new ServiceResponseModel<IEnumerable<UserInfo>>();
@@ -126,7 +129,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         [Route("RefreshToken")]
         public async Task<IActionResult> RefreshToken([FromBody] UserInfoModel user)
         {
@@ -158,12 +161,12 @@ namespace SmartBase.BusinessLayer.Controllers
 
 
         /// <summary>
-        /// Get user by user name
+        /// Get user by user name. Required => UserName
         /// </summary>
         /// <param name="userinfo"></param>
         /// <returns></returns>
         [Route("ByName")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetUserByName([FromBody] UserInfoModel userinfo)
         {
             ServiceResponseModel<UserInfoModel> response = new ServiceResponseModel<UserInfoModel>();
@@ -227,7 +230,7 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// Edit user
+        /// Edit user. Required => CompCode+UserName+UserPassword
         /// </summary>
         /// <param name="editUser"></param>
         /// <returns></returns>
@@ -265,7 +268,7 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        ///  Delete user
+        ///  Delete user. Required UserName
         /// </summary>
         /// <param name="userinfo"></param>
         /// <returns></returns>

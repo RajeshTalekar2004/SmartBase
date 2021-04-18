@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Controllers
 {
+    /// <summary>
+    /// This controller is used for CRUD and paging for Central GST.
+    /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
@@ -61,9 +64,11 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <summary>
         /// Get all CGST order by cgstDetail,cgstRate,cgstId
         /// </summary>
+        /// <param name="pageParams"></param>
+        /// <param name="getCgstMaster"></param>
         /// <returns></returns>
         [Route("GetAllByPage")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] CgstMasterModel getCgstMaster)
         {
             ServiceResponseModel<IEnumerable<CgstMaster>> response = new ServiceResponseModel<IEnumerable<CgstMaster>>();
@@ -84,13 +89,13 @@ namespace SmartBase.BusinessLayer.Controllers
 
 
         /// <summary>
-        /// 
+        /// Get cgst id. Required => CgstId
         /// </summary>
         /// <param name="cgstModel"></param>
         /// <returns></returns>
-        [HttpGet]
-        [Route("{cgstId}")]
-        public async Task<IActionResult> GetCgstByCode([FromQuery] CgstMasterModel cgstModel)
+        [HttpPost]
+        [Route("GetCgstByCode")]
+        public async Task<IActionResult> GetCgstByCode([FromBody] CgstMasterModel cgstModel)
         {
             ServiceResponseModel<CgstMasterModel> response = new  ServiceResponseModel<CgstMasterModel>();
             try

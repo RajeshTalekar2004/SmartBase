@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Controllers
 {
+    /// <summary>
+    /// This controller is used for CRUD and paging. Contain information which accounts should be used in voucher header section
+    /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
@@ -149,9 +152,11 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <summary>
         /// Get all TransactionMaster trxId
         /// </summary>
+        /// <param name="pageParams"></param>
+        /// <param name="getTransactionMaster"></param>
         /// <returns></returns>
         [Route("GetAllByPage")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] TransactionMasterModel getTransactionMaster)
         {
             ServiceResponseModel<IEnumerable<TransactionMaster>> response = new ServiceResponseModel<IEnumerable<TransactionMaster>>();

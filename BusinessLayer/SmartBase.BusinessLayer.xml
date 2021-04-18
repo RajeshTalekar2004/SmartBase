@@ -6,7 +6,7 @@
     <members>
         <member name="T:SmartBase.BusinessLayer.Controllers.AccountMasterController">
             <summary>
-            Manage Financial account master
+            This controller is used for CRUD and paging for Account Master.
             </summary>   
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.AccountMasterController.#ctor(SmartBase.BusinessLayer.Services.Interfaces.IAccountMasterService,Microsoft.Extensions.Logging.ILogger{SmartBase.BusinessLayer.Controllers.AccountMasterController})">
@@ -25,7 +25,7 @@
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.AccountMasterController.Delete(SmartBase.BusinessLayer.Persistence.Models.AccountMasterModel)">
             <summary>
-            Delete account
+            Delete account CompCode+AccYear+AccountId is required
             </summary>
             <param name="delAccountMaster"></param>
             <returns></returns>
@@ -39,14 +39,14 @@
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.AccountMasterController.GetAccountByCode(SmartBase.BusinessLayer.Persistence.Models.AccountMasterModel)">
             <summary>
-            Get account by code. Required CompCode+year+AccountId
+            POST account by code. Required CompCode+year+AccountId
             </summary>
             <param name="editAccountMasterModel"></param>
             <returns></returns>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.AccountMasterController.SearchAccountByCode(SmartBase.BusinessLayer.Persistence.Models.AccountMasterModel)">
             <summary>
-            Search AccountID start with wild card search. CompCode+year+AccountId
+            Post Search AccountID start with wild card search. CompCode+year+AccountId
             </summary>
             <param name="editAccountMasterModel"></param>
             <returns></returns>
@@ -76,7 +76,14 @@
             <summary>
             Get all Account by accountId,name
             </summary>
+            <param name="pageParams"></param>
+            <param name="accountMasterModel"></param>
             <returns></returns>
+        </member>
+        <member name="T:SmartBase.BusinessLayer.Controllers.BillDetailController">
+            <summary>
+            This controller is used for CRUD and paging for Bill Detail matching with voucher.
+            </summary>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.BillDetailController.Add(SmartBase.BusinessLayer.Persistence.Models.BillDetailModel)">
             <summary>
@@ -108,8 +115,10 @@
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.BillDetailController.GetAll(SmartBase.BusinessLayer.Persistence.PageParams,SmartBase.BusinessLayer.Persistence.Models.BillDetailModel)">
             <summary>
-            Get all bill details by paging order by billId / vouNo
+            Get bill detail with paging. Required =>CompCode+AccYear
             </summary>
+            <param name="pageParams"></param>
+            <param name="getBillDetailModel"></param>
             <returns></returns>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.BillDetailController.GetBillId(SmartBase.BusinessLayer.Persistence.Models.BillDetailModel)">
@@ -118,6 +127,11 @@
             </summary>
             <param name="billMasterId"></param>
             <returns></returns>
+        </member>
+        <member name="T:SmartBase.BusinessLayer.Controllers.BillMasterController">
+            <summary>
+            This controller is used for CRUD and paging for Bill Header matching
+            </summary>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.BillMasterController.GetAll(SmartBase.BusinessLayer.Persistence.Models.BillMasterModel)">
             <summary>
@@ -128,7 +142,7 @@
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.BillMasterController.GetAll(SmartBase.BusinessLayer.Persistence.PageParams,SmartBase.BusinessLayer.Persistence.Models.BillMasterModel)">
             <summary>
-            Get all Bill master by paging. Sort by billId,accountId,billDate
+            Get all Bill master by paging. Required => CompCode+AccYear. Sort by billId,accountId,billDate
             </summary>
             <returns></returns>
         </member>
@@ -160,6 +174,11 @@
             <param name="billMasterModel"></param>
             <returns></returns>
         </member>
+        <member name="T:SmartBase.BusinessLayer.Controllers.CgstMasterController">
+            <summary>
+            This controller is used for CRUD and paging for Central GST.
+            </summary>
+        </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.CgstMasterController.#ctor(SmartBase.BusinessLayer.Services.Interfaces.ICgstMasterService,Microsoft.Extensions.Logging.ILogger{SmartBase.BusinessLayer.Controllers.CgstMasterController})">
             <summary>
             Initilize CGST account controller
@@ -177,11 +196,13 @@
             <summary>
             Get all CGST order by cgstDetail,cgstRate,cgstId
             </summary>
+            <param name="pageParams"></param>
+            <param name="getCgstMaster"></param>
             <returns></returns>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.CgstMasterController.GetCgstByCode(SmartBase.BusinessLayer.Persistence.Models.CgstMasterModel)">
             <summary>
-            
+            Get cgst id. Required => CgstId
             </summary>
             <param name="cgstModel"></param>
             <returns></returns>
@@ -209,7 +230,7 @@
         </member>
         <member name="T:SmartBase.BusinessLayer.Controllers.CompanyController">
             <summary>
-            
+            This controller is used for CRUD and paging for Company information.
             </summary>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.CompanyController.#ctor(SmartBase.BusinessLayer.Services.Interfaces.ICompanyService,Microsoft.Extensions.Logging.ILogger{SmartBase.BusinessLayer.Controllers.CompanyController})">
@@ -229,35 +250,49 @@
             <summary>
             Get all Company information by compCode,name
             </summary>
+            <param name="pageParams"></param>
+            <param name="getCompany"></param>
             <returns></returns>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.CompanyController.GetCompanyByCode(SmartBase.BusinessLayer.Persistence.Models.CompanyModel)">
             <summary>
-            
+            Get company by code. Required=>CompCode
             </summary>
             <param name="editCompany"></param>
             <returns></returns>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.CompanyController.Delete(System.String)">
             <summary>
-            
+            delte company. Required Company code 
             </summary>
             <param name="ByCode"></param>
             <returns></returns>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.CompanyController.Add(SmartBase.BusinessLayer.Persistence.Models.CompanyModel)">
             <summary>
-            Add new company
+            Add new company. Required =>CompCode,AccYear,Name
             </summary>
             <param name="newCompany"></param>
             <returns></returns>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.CompanyController.Edit(SmartBase.BusinessLayer.Persistence.Models.CompanyModel)">
             <summary>
-            Edit Company
+            Edit Company. Required => CompCode+AccYear+Name 
             </summary>
             <param name="editCompany"></param>
             <returns></returns>
+        </member>
+        <member name="M:SmartBase.BusinessLayer.Controllers.CompanyController.NewYear(SmartBase.BusinessLayer.Persistence.Models.CompanyNewYearModel)">
+            <summary>
+            Create new year process. Required => CompCode+AccYear+NewYear
+            </summary>
+            <param name="newCompany"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SmartBase.BusinessLayer.Controllers.IgstMasterController">
+            <summary>
+            This controller is used for CRUD and paging for Inter State GST.
+            </summary>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.IgstMasterController.Get">
             <summary>
@@ -269,6 +304,8 @@
             <summary>
             Get all Igst Codes by IgstId,IgstDetail,IgstRate
             </summary>
+            <param name="pageParams"></param>
+            <param name="getIgstMaster"></param>
             <returns></returns>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.IgstMasterController.GetIgstByCode(SmartBase.BusinessLayer.Persistence.Models.IgstMasterModel)">
@@ -287,18 +324,22 @@
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.IgstMasterController.Add(SmartBase.BusinessLayer.Persistence.Models.IgstMasterModel)">
             <summary>
-            Add new IGST code
+            Add new IGST code. Required => IgstId+IgstDetail
             </summary>
             <param name="newIgstMaster"></param>
             <returns></returns>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.IgstMasterController.Edit(SmartBase.BusinessLayer.Persistence.Models.IgstMasterModel)">
             <summary>
-            Edit IGST code
+            Edit IGST code. Required => IgstId+IgstDetail
             </summary>
             <param name="editIgstMaster"></param>
-            <param name="newIgstMaster"></param>
             <returns></returns>
+        </member>
+        <member name="T:SmartBase.BusinessLayer.Controllers.LedgerController">
+            <summary>
+            This controller is used for CRUD and paging for Ledger. This is not interacted by user.
+            </summary>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.LedgerController.Add(SmartBase.BusinessLayer.Persistence.Models.LedgerModel)">
             <summary>
@@ -348,6 +389,27 @@
             <param name="newLedgerModel"></param>
             <returns></returns>
         </member>
+        <member name="M:SmartBase.BusinessLayer.Controllers.LedgerController.GeneralLedger(SmartBase.BusinessLayer.Persistence.Models.ReportModel)">
+            <summary>
+            Generate ledger. Required => CompCode+AccYear+StartDate+StartAccount+FinishAccount
+            </summary>
+            <param name="reportModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartBase.BusinessLayer.Controllers.LedgerController.SaleRegister(SmartBase.BusinessLayer.Persistence.Models.ReportModel)">
+            <summary>
+            Generate Sales or Purchase Register. Required=>CompCode+AccYear+StartDate+SaleOrPurchaseType.
+            SaleOrPurchaseType = 'P' for purchase register
+            SaleOrPurchaseType = 'S' for sales register
+            </summary>
+            <param name="reportModel"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SmartBase.BusinessLayer.Controllers.SgstMasterController">
+            <summary>
+            This controller is used for CRUD and paging for State GST.
+            </summary>
+        </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.SgstMasterController.#ctor(SmartBase.BusinessLayer.Services.Interfaces.ISgstMasterService,Microsoft.Extensions.Logging.ILogger{SmartBase.BusinessLayer.Controllers.SgstMasterController})">
             <summary>
             
@@ -369,7 +431,7 @@
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.SgstMasterController.GetSgstByCode(SmartBase.BusinessLayer.Persistence.Models.SgstMasterModel)">
             <summary>
-            
+            Get SGST by Id. Required =>SgstId
             </summary>
             <param name="editSgstMaster"></param>
             <returns></returns>
@@ -394,6 +456,11 @@
             </summary>
             <param name="editSgstMaster"></param>
             <returns></returns>
+        </member>
+        <member name="T:SmartBase.BusinessLayer.Controllers.TransactionMasterController">
+            <summary>
+            This controller is used for CRUD and paging. Contain information which accounts should be used in voucher header section
+            </summary>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.TransactionMasterController.#ctor(SmartBase.BusinessLayer.Services.Interfaces.ITransactionMasterService,Microsoft.Extensions.Logging.ILogger{SmartBase.BusinessLayer.Controllers.TransactionMasterController})">
             <summary>
@@ -433,6 +500,8 @@
             <summary>
             Get all TransactionMaster trxId
             </summary>
+            <param name="pageParams"></param>
+            <param name="getTransactionMaster"></param>
             <returns></returns>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.TransactionMasterController.GetByCode(System.String)">
@@ -441,6 +510,11 @@
             </summary>
             <param name="trxId"></param>
             <returns></returns>
+        </member>
+        <member name="T:SmartBase.BusinessLayer.Controllers.TypeMasterController">
+            <summary>
+            This controller is used for managing voucher Serial number
+            </summary>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.TypeMasterController.#ctor(SmartBase.BusinessLayer.Services.Interfaces.ITypeMasterService,Microsoft.Extensions.Logging.ILogger{SmartBase.BusinessLayer.Controllers.TransactionMasterController})">
             <summary>
@@ -478,9 +552,23 @@
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.TypeMasterController.GetAll(SmartBase.BusinessLayer.Persistence.PageParams,SmartBase.BusinessLayer.Persistence.Models.TypeMasterModel)">
             <summary>
-            Get all TypeMaster by trdCd,trxDetail
+            Get all TypeMaster by trdCd,trxDetail. Required => CompCode+AccYear
             </summary>
+            <param name="pageParams"></param>
+            <param name="getTypeMasterModel"></param>
             <returns></returns>
+        </member>
+        <member name="M:SmartBase.BusinessLayer.Controllers.TypeMasterController.GetTypeByCode(SmartBase.BusinessLayer.Persistence.Models.TypeMasterModel)">
+            <summary>
+            Get Type by code. Required => CompCode+AccYear+TrxCd
+            </summary>
+            <param name="typeMasterModel"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SmartBase.BusinessLayer.Controllers.UserController">
+            <summary>
+            This controller use for user managemennt and token management.
+            </summary>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.UserController.#ctor(SmartBase.BusinessLayer.Services.Interfaces.IUserService,Microsoft.Extensions.Logging.ILogger{SmartBase.BusinessLayer.Controllers.TransactionMasterController})">
             <summary>
@@ -497,7 +585,7 @@
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.UserController.GetAll(SmartBase.BusinessLayer.Persistence.PageParams,SmartBase.BusinessLayer.Persistence.Models.UserInfoModel)">
             <summary>
-            Get all user info by userName, userEmailId
+            Get all user info by userName, userEmailId. Required => CompCode
             </summary>
             <returns></returns>
         </member>
@@ -517,7 +605,7 @@
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.UserController.GetUserByName(SmartBase.BusinessLayer.Persistence.Models.UserInfoModel)">
             <summary>
-            Get user by user name
+            Get user by user name. Required => UserName
             </summary>
             <param name="userinfo"></param>
             <returns></returns>
@@ -531,17 +619,22 @@
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.UserController.Edit(SmartBase.BusinessLayer.Persistence.Models.UserInfoModel)">
             <summary>
-            Edit user
+            Edit user. Required => CompCode+UserName+UserPassword
             </summary>
             <param name="editUser"></param>
             <returns></returns>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.UserController.Delete(SmartBase.BusinessLayer.Persistence.Models.UserInfoModel)">
             <summary>
-             Delete user
+             Delete user. Required UserName
             </summary>
             <param name="userinfo"></param>
             <returns></returns>
+        </member>
+        <member name="T:SmartBase.BusinessLayer.Controllers.VoucherDetailController">
+            <summary>
+            This controller is used for CRUD and paging for Voucher Detail. But it will never required user interaction
+            </summary>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.VoucherDetailController.Add(SmartBase.BusinessLayer.Persistence.Models.VoucherDetailModel)">
             <summary>
@@ -575,6 +668,8 @@
             <summary>
             Get all Voucher Details by vouNo,accountId
             </summary>
+            <param name="pageParams"></param>
+            <param name="getVoucherDetailModel"></param>
             <returns></returns>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.VoucherDetailController.GetByVouNo(SmartBase.BusinessLayer.Persistence.Models.VoucherDetailModel)">
@@ -591,9 +686,14 @@
             <param name="getVoucherDetailModel"></param>
             <returns></returns>
         </member>
+        <member name="T:SmartBase.BusinessLayer.Controllers.VoucherMasterController">
+            <summary>
+            This controller used for voucher entry CRUD / Paging
+            </summary>
+        </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.VoucherMasterController.Add(SmartBase.BusinessLayer.Persistence.Models.VoucherMasterModel)">
             <summary>
-            
+            Add new voucher. Required CompCode+AccYear
             </summary>
             <param name="newVoucherMasterModel"></param>
             <returns></returns>
@@ -614,27 +714,34 @@
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.VoucherMasterController.GetByTrxType(SmartBase.BusinessLayer.Persistence.Models.VoucherMasterModel)">
             <summary>
-            Edit Voucher Master CompCode+AccYear+TrxType is required field
+            Get Voucher Master CompCode+AccYear+TrxType is required field
             </summary>
             <param name="editVoucherMasterModel"></param>
             <returns></returns>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.VoucherMasterController.GetByVouNo(SmartBase.BusinessLayer.Persistence.Models.VoucherMasterModel)">
             <summary>
-            
+             Get Voucher Master CompCode+AccYear is required field
+            </summary>
+            <param name="getVoucherMasterModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartBase.BusinessLayer.Controllers.VoucherMasterController.GetAccountByTrxId(SmartBase.BusinessLayer.Persistence.Models.VoucherMasterModel)">
+            <summary>
+            Get account list by TrxCd. Required => CompCode+AccYear+TrxType
             </summary>
             <param name="getVoucherMasterModel"></param>
             <returns></returns>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.VoucherMasterController.GetAll(SmartBase.BusinessLayer.Persistence.PageParams,SmartBase.BusinessLayer.Persistence.Models.VoucherMasterModel)">
             <summary>
-            Get all Voucher Details by vouNo,accountId
+            Get all Voucher Details by vouNo,accountId. Required =>CompCode+AccYear+TrxType
             </summary>
             <returns></returns>
         </member>
         <member name="T:SmartBase.BusinessLayer.Controllers.WeatherForecastController">
             <summary>
-            Weather Controller responsible for GET/POST for managing weather
+            This is test controller to validate IIS service is working
             </summary>
         </member>
         <member name="M:SmartBase.BusinessLayer.Controllers.WeatherForecastController.Get">

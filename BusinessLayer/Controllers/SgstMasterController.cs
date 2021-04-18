@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Controllers
 {
+    /// <summary>
+    /// This controller is used for CRUD and paging for State GST.
+    /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
@@ -63,7 +66,7 @@ namespace SmartBase.BusinessLayer.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("GetAllByPage")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] SgstMasterModel getSgstMaster)
         {
             ServiceResponseModel<IEnumerable<SgstMaster>> response = new ServiceResponseModel<IEnumerable<SgstMaster>>();
@@ -84,12 +87,12 @@ namespace SmartBase.BusinessLayer.Controllers
 
 
         /// <summary>
-        /// 
+        /// Get SGST by Id. Required =>SgstId
         /// </summary>
         /// <param name="editSgstMaster"></param>
         /// <returns></returns>
-        [HttpGet]
-        [Route("{sgstId}")]
+        [HttpPost]
+        [Route("GetSgstByCode")]
         public async Task<IActionResult> GetSgstByCode([FromBody] SgstMasterModel editSgstMaster)
         {
             ServiceResponseModel<SgstMasterModel> response = new ServiceResponseModel<SgstMasterModel>();

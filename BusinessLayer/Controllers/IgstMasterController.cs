@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace SmartBase.BusinessLayer.Controllers
 {
+    /// <summary>
+    /// This controller is used for CRUD and paging for Inter State GST.
+    /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
@@ -55,9 +58,11 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <summary>
         /// Get all Igst Codes by IgstId,IgstDetail,IgstRate
         /// </summary>
+        /// <param name="pageParams"></param>
+        /// <param name="getIgstMaster"></param>
         /// <returns></returns>
         [Route("GetAllByPage")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] IgstMasterModel getIgstMaster)
         {
             ServiceResponseModel<IEnumerable<IgstMaster>> response = new ServiceResponseModel<IEnumerable<IgstMaster>>();
@@ -82,8 +87,8 @@ namespace SmartBase.BusinessLayer.Controllers
         /// </summary>
         /// <param name="editIgstMaster"></param>
         /// <returns></returns>
-        [HttpGet]
-        [Route("{igstId}")]
+        [HttpPost]
+        [Route("GetIgstByCode")]
         public async Task<IActionResult> GetIgstByCode([FromBody] IgstMasterModel editIgstMaster)
         {
             ServiceResponseModel<IgstMasterModel> response = new ServiceResponseModel<IgstMasterModel>();
@@ -141,7 +146,7 @@ namespace SmartBase.BusinessLayer.Controllers
         }
 
         /// <summary>
-        /// Add new IGST code
+        /// Add new IGST code. Required => IgstId+IgstDetail
         /// </summary>
         /// <param name="newIgstMaster"></param>
         /// <returns></returns>
@@ -159,11 +164,7 @@ namespace SmartBase.BusinessLayer.Controllers
                 {
                     throw new ArgumentNullException("IgstDetail is required");
                 }
-                if (newIgstMaster.IgstId < 0)
-                {
-                    throw new ArgumentNullException("IgstId is required");
-                }
-
+     
                 response = await _igstService.Add(newIgstMaster);
                 if (response.Data == null)
                 {
@@ -179,11 +180,11 @@ namespace SmartBase.BusinessLayer.Controllers
             return Ok(response);
         }
 
+
         /// <summary>
-        /// Edit IGST code
+        /// Edit IGST code. Required => IgstId+IgstDetail
         /// </summary>
         /// <param name="editIgstMaster"></param>
-        /// <param name="newIgstMaster"></param>
         /// <returns></returns>
         [HttpPut("Edit")]
         public async Task<IActionResult> Edit([FromBody] IgstMasterModel editIgstMaster)
