@@ -32,6 +32,53 @@ namespace SmartBase.BusinessLayer.Controllers
         /// </summary>
         /// <param name="newVoucherMasterModel"></param>
         /// <returns></returns>
+        /// <remarks>Sample request (this request Add voucherr **Bank Receipt**)  
+        /// 
+        /// POST /VoucherMaster/Add
+        /// [ 
+        ///     {
+        ///         "compCode": "01",
+	    ///         "accYear": "1920",
+	    ///         "vouNo": "000011",
+	    ///         "vouDate": "04-05-2020",
+	    ///         "trxType": "A",
+	    ///         "bilChq": "1012",
+	    ///         "billId": null,
+	    ///         "accountId": "50301",
+	    ///         "drCr": "1",
+	    ///         "vouDetail": null,
+	    ///         "VouAmount":43143.00,
+	    ///         "netAmount": null,
+	    ///         "sgstId": null,
+	    ///         "sgstAmount": null,
+	    ///         "cgstId": null,
+	    ///         "cgstAmount": null,
+	    ///         "sortAccountBy": null,
+	    ///         "accountMaster": null,
+	    ///         "billMaster": null,
+	    ///         "cgst": null,
+	    ///         "compInfo": null,
+	    ///         "sgst": null,
+	    ///         "typeMaster": null,
+	    ///         "ledgers": [],
+	    ///         "voucherDetails": [
+	    ///	            {
+	    ///		            "compCode": "01",
+	    ///		            "accYear": "1920",
+	    ///		            "vouNo": "000011",
+	    ///		            "itemSr": 1,
+	    ///		            "accountId": "316",
+	    ///		            "drCr": "2",
+	    ///		            "amount": 43143.00,
+	    ///		            "vouDetail": "OD PNL CHARGES REVERCE. AUG.19 TO JAN.20.",
+	    ///		            "sortAccountBy": null,
+	    ///		            "accountMaster": null
+        ///             }
+        /// 	    ]
+        ///     } 
+        /// ] 
+        /// </remarks>
+        /// <response code="200">Returns the Added Voucher</response>
         [HttpPost("Add")]
         public async Task<IActionResult> Add(VoucherMasterModel newVoucherMasterModel)
         {

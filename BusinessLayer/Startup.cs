@@ -46,11 +46,12 @@ namespace SmartBase.BusinessLayer
                     {
                         Title = "SmartBase-Bussiness",
                         Version = "v1",
-                        Description = "Smart Accouting",
+                        Description = "<strong>Smart Base.<strong></br><strong>Build<strong>:" + GetType().Assembly.GetName().Version.ToString(),
                         Contact = new Microsoft.OpenApi.Models.OpenApiContact()
                         {
                             Email = "rajeshtalekar@gmail.com",
-                            Name = "Smart Base"
+                            Name = "Smart Base",
+                            Url = new Uri("https://www.linkedin.com/in/rajeshtalekar/")
                         },
                     }
                  );
@@ -254,7 +255,7 @@ namespace SmartBase.BusinessLayer
                        .AddEnvironmentVariables()
                        .Build();
 
-            var hosts   = _configuration.GetSection("Cors:AllowedOriginsList").Get<List<string>>();
+            var hosts = _configuration.GetSection("Cors:AllowedOriginsList").Get<List<string>>();
             app.UseCors(options =>
                         options.WithOrigins(hosts.ToArray())
                         .AllowAnyMethod()

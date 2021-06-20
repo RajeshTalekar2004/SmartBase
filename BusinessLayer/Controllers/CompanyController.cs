@@ -68,7 +68,8 @@ namespace SmartBase.BusinessLayer.Controllers
         /// <returns></returns>
         [Route("GetAllByPage")]
         [HttpPost]
-        public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] CompanyModel getCompany)
+        //[HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] PageParams pageParams, [FromBody] CompanyModel getCompany = null)
         {
             ServiceResponseModel<IEnumerable<CompInfo>> response = new ServiceResponseModel<IEnumerable<CompInfo>>();
             try

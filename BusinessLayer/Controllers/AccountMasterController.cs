@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SmartBase.BusinessLayer.Core.Domain;
@@ -38,7 +39,27 @@ namespace SmartBase.BusinessLayer.Controllers
         /// </summary>
         /// <param name="newAccountMaster"></param>
         /// <returns></returns>
+        /// <returns>An ActionResult of type AccountMaster</returns>
+        /// <remarks>Sample request (this request Add the account **name**)  
+        /// 
+        /// POST /AccountMaster/Add
+        /// [ 
+        ///     {
+        ///         "compCode": "01",
+        ///         "accYear": "1920",
+        ///         "accountId": "101022           ",
+        ///         "name": "OPENING STOCK OF SILVER  Rajesh",
+        ///         "opening": null,
+        ///         "curDr": null,
+        ///         "curCr": null,
+        ///         "closing": null
+        ///     } 
+        /// ] 
+        /// </remarks>
+        /// <response code="200">Returns the updated EYAppTypes</response>
         [HttpPost("Add")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Add([FromBody] AccountMasterModel newAccountMaster)
         {
             ServiceResponseModel<AccountMasterModel> response = new ServiceResponseModel<AccountMasterModel>();

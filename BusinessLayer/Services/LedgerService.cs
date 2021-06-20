@@ -102,7 +102,6 @@ namespace SmartBase.BusinessLayer.Services
             return await PagedList<Ledger>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
-
         public async Task<ServiceResponseModel<IEnumerable<LedgerModel>>> GetByCode(LedgerModel editLedgerModel)
         {
             ServiceResponseModel<IEnumerable<LedgerModel>> serviceResponse = new ServiceResponseModel<IEnumerable<LedgerModel>>();
@@ -115,7 +114,6 @@ namespace SmartBase.BusinessLayer.Services
 
             return serviceResponse;
         }
-
 
         public async Task<ServiceResponseModel<string>> Receate(LedgerModel editLedgerModel)
         {
